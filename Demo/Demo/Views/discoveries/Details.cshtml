@@ -1,0 +1,91 @@
+﻿@model Demo.discovery
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>discovery</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.serial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.serial)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.brand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.brand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cpu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cpu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.hdd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.hdd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ram)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ram)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.optical_drive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.optical_drive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.location)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ictag }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

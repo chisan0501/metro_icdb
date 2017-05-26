@@ -1,0 +1,75 @@
+﻿@model Demo.monitor_log
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>monitor_log</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.manu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.manu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.monitor_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.monitor_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.serial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.serial)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.size)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.size)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resou)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resou)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.model)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ictag }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

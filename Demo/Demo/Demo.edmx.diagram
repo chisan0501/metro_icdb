@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2af346c51598428db55941f3a8103a5f" Name="Diagram1">
+        <EntityTypeShape EntityType="db_a094d4_demoModel.aspnetroles" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.aspnetuserclaims" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.aspnetuserlogins" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.aspnetusers" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.asset_tag_counter" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.coas" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.coas_history" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.discovery" Width="1.5" PointX="7.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.label_log" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.label_menu" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.mac_log" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.monitor_log" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.monitor_setting" Width="1.5" PointX="4.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.pallet" Width="1.5" PointX="6.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.pallet_master" Width="1.5" PointX="9.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.production_log" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.rediscovery" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.setting" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.setting_bol" Width="1.5" PointX="11.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.station_setting" Width="1.5" PointX="11.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.users" Width="1.5" PointX="4.75" PointY="12.75" IsExpanded="true" />
+        <AssociationConnector Association="db_a094d4_demoModel.ApplicationUser_Claims" ManuallyRouted="false" />
+        <AssociationConnector Association="db_a094d4_demoModel.ApplicationUser_Logins" ManuallyRouted="false" />
+        <AssociationConnector Association="db_a094d4_demoModel.aspnetuserroles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.scripts" Width="1.5" PointX="0.75" PointY="13.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

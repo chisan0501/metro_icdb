@@ -1,0 +1,573 @@
+﻿
+@{
+    ViewBag.Title = "Manage";
+}
+
+
+<div id="confrim_modal" class="modal">
+    <div class="modal-content">
+        <h4>Message</h4>
+        <p>Enter the # of the Asset Tag you would like to reset to</p>
+        <div class="input-field col s6">
+            <input id="asset" type="text" class="validate">
+            <label for="asset">Asset Tag</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#" id="confrim_reset_btn" class="modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+    </div>
+</div>
+
+<div id="station_modal" class="modal">
+    <div class="modal-content">
+        <h4>Settings</h4>
+       <table>
+           <tbody>
+               <tr>
+                   
+                   <td>Add Stations</td>
+                   <td><input id="station_name" type="text" placeholder="Enter Station Name"/></td>
+                   <td><a id="add_station_btn" class="waves-effect waves-light btn">Add</a></td>
+               </tr>
+               <tr>
+                   <td>Remove Station</td>
+                   <td>
+                       <select id="remove_station" class="station_dropdown">
+                           
+                       </select>
+                   </td>
+                   <td><a id="remove_station_btn" class="waves-effect waves-light btn">Remove</a></td>
+               </tr>
+           </tbody>
+       </table>
+        
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col s5">
+
+        <h3 class="header"><i class="small material-icons">settings</i>Settings</h3>
+
+    </div>
+    <div class="col s7">
+        <div id="loader" class="preloader-wrapper">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col s12">
+
+            <ul id="tabs-swipe-demo" class="tabs">
+                <li class="tab col s3"><a class="active" href="#tab3">General</a></li>
+                <li class="tab col s3"><a  href="#tab1">Asset Tag</a></li>
+                <li class="tab col s3"><a href="#tab2">User</a></li>
+                
+                <li class="tab col s3"><a href="#tab4">COAs</a></li>
+            </ul>
+            <div id="tab1" class="col s12">
+
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Settings</th>
+                          
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td>Reset COAs Counter</td>
+                            <td id="counter" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Reset the asset tag to 10001"></td>
+                            <td></td>
+                            <td><a id="reset_btn" class="waves-effect waves-light btn">Reset</a></td>
+                        </tr>
+                        <tr>
+                            <td>Print Asset Tag</td>
+                            
+                            <td>
+                                
+                                    <input id="number_asset_tag" type="text" class="validate" placeholder="# of Asset Tag">
+                                   
+                              
+                            </td>
+                            
+                           
+                            <td>
+                                <ul class="collapsible" data-collapsible="accordion">
+                                    <li>
+                                        <div class="collapsible-header active"><i class="material-icons">arrow_drop_down</i>Expand</div>
+                                        <div class="collapsible-body"><div id="elem"><ul id="ull"></ul></div></div>
+                                    </li>
+                                    
+                                </ul>
+                            </td>
+                            <td><a id="print_btn" class="waves-effect waves-light btn">Print</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div id="tab2" class="col s12">
+                <table>
+                  
+                    <tbody>
+
+                        <tr>
+                            <td>Change Roles</td>
+                            <td>
+
+                                <select class="user_dropdown" id="user_list"></select>
+
+                            </td>
+                            <td>
+
+                                <select class="user_dropdown" id="role_list"></select>
+
+                            </td>
+                            <td><a id="change_user_btn" class="waves-effect waves-light btn">Change</a></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div id="tab3" class="col s12">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Connection String</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        
+                            <td>
+                                <form id="dis_form" action="gen_server_url" method="post">
+                                    <a>Discovery Tool</a>
+                                    <input name="server_address" class="validate" type="text" placeholder="Please Enter Server Address" required />
+                                    <input name="user_name" type="text" placeholder="Please Enter User Name" />
+                                    <input name="password" type="password" placeholder="Please Enter Password" />
+                                    <input name="db_name" type="text" placeholder="Please Enter Database Name" />
+                                    <input id="discovery_db_form" class="waves-effect waves-light btn" type="submit" />
+                                </form>
+                               
+                            </td>
+                         
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div id="tab4" class="col s12">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+
+                            <th></th>
+                            <th></th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+
+                        <tr>
+
+                            <td>Import COAs</td>
+                            <td>
+                                
+                                    <select class="station_dropdown" id="coas_stations"><option value="" disabled selected>Choose your option</option></select>
+                                    
+                                </td>
+                            
+                            <td class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import COAs CSV">
+                               
+
+                                    <div class="file-field input-field">
+                                        <div class="btn">
+                                            <span>File</span>
+                                            <input id="coa_csv_upload" type="file" accept=".csv">
+                                        </div> 
+                                        <div class="file-path-wrapper">
+                                            <input id="file_path" class="file-path validate" type="text">
+                                        </div>
+                                    </div>
+
+                             
+                           
+
+
+                            </td>
+                            <td><a id="upload_btn" class="waves-effect waves-light btn">Upload</a></td>
+
+                        </tr>
+                        <tr>
+                            <td>Manage Stations</td>
+
+                            <td>
+                              
+                            </td>
+  <td></td>
+                            <td><a id="station_btn" class="waves-effect waves-light btn">Settings</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+<script>
+    $('.modal').modal();
+
+    update_counter();
+    get_coas_station(".station_dropdown");
+    get_users();
+
+
+
+    function get_users() {
+
+        $.getJSON("@Url.Action("Get_role")", function (data) {
+
+
+            $('.user_dropdown').material_select('destroy');
+            $('#user_list').html($("<option value='' disabled selected>Choose User</option>"));
+            $('#role_list').html($("<option value='' disabled selected>Choose Role</option>"));
+            for (var i = 0; i < data.name.length; i++) {
+
+                $('#user_list').append($("<option></option>").attr("value", data.name[i]).text(data.name[i]));
+
+            }
+            for (var i = 0; i < data.role.length; i++) {
+
+
+                $('#role_list').append($("<option></option>").attr("value", data.role[i]).text(data.role[i]));
+            }
+            $('.user_dropdown').material_select();
+        });
+
+
+    }
+
+
+    function importCsvCheck() {
+
+        var station = document.getElementById("coas_stations").value;
+        var file_path = document.getElementById("file_path").value;
+        if (station == "" || file_path == "") {
+            Materialize.toast("Error. Station or File cant be Empty", 3000);
+            throw new Error("Station or file cant be empty");
+        }
+
+    }
+
+    function get_coas_station(dropdownID) {
+        $.getJSON("@Url.Action("get_coas_station")", function (data) {
+
+            $('select').material_select('destroy');
+
+            $(dropdownID).html($("<option value='' disabled selected>Choose your option</option>"));
+            for (var i = 0; i < data.length; i++) {
+
+                $(dropdownID).append($("<option></option>").attr("value", data[i]).text(data[i]));
+
+            }
+
+            $('select').material_select();
+        });
+
+
+    }
+
+    function update_counter() {
+
+        $.getJSON("@Url.Action("get_counter_number")", function (data) {
+            var count = data;
+            $('#counter').text(count);
+            sessionStorage.setItem('count', count);
+    });
+
+    }
+    function reset_counter(data) {
+
+                $.getJSON("@Url.Action("reset_asset")", data, function (data) {
+
+            Materialize.toast(data, 3000);
+            update_counter();
+        });
+    }
+    var csv_file;
+    function handleFileSelect(evt) {
+
+        csv_file = evt.target.files[0];
+
+
+
+    }
+
+
+
+        $("#coa_csv_upload").change(handleFileSelect);
+        $("#upload_btn").click(function () {
+            importCsvCheck();
+            $('#loader').attr('class', 'preloader-wrapper active');
+
+
+        var csv_json;
+        Papa.parse(csv_file, {
+            header: true,
+            skipEmptyLines:true,
+            dynamicTyping: true,
+            beforeFirstChunk: function (chunk) {
+
+
+                var rows = chunk.split(/\r\n|\r|\n/);
+
+                rows[0] = rows[0].replace("/", "");
+                rows[0] = rows[0].replace("-", "");
+                rows[0] = rows[0].replace(/ /g, "");
+
+
+                return rows.join("\r\n");
+            },
+            complete: function (results) {
+                csv_json = results;
+
+
+
+
+                $.ajax({
+                url: "@Url.Action("import_coa")",
+                type: "POST",
+                data: JSON.stringify(csv_json.data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+            },
+                success: function (data) {
+
+                    for (var i = 0; i < data.message.length; i++) {
+                        $('#loader').attr('class', 'preloader-wrapper');
+                        Materialize.toast(data.message[i], 3000);
+
+                    }
+
+                }
+        });
+
+            }
+        });
+
+
+
+        });
+
+        function station_vali() {
+
+            var station_name = document.getElementById("station_name").value;
+
+            if (station_name == "") {
+
+                Materialize.toast("Error. Station Name cant be Empty", 3000);
+                throw new Error("Station Name cant be Empty");
+            }
+
+        };
+
+        $('#add_station_btn').click(function () {
+            station_vali();
+            var station_name = $('#station_name').val();
+
+            var data = {
+                station_name: station_name
+            };
+            $.getJSON("@Url.Action("add_station")", data, function (data) {
+
+                for (var i = 0; i < data.message.length; i++) {
+
+                    Materialize.toast(data.message[i], 3000);
+
+                }
+                get_coas_station(".station_dropdown");
+            });
+
+        });
+
+        $('#confrim_reset_btn').click(function () {
+
+        var asset = $('#asset').val();
+        var data = {
+
+            asset: asset,
+        };
+
+
+        reset_counter(data);
+
+    });
+
+
+    $('#print_btn').click(function () {
+        var number_asset_tag = Number($('#number_asset_tag').val());
+
+        var current_count = Number($('#counter').text());
+
+        var start = current_count;
+
+        var end = start + number_asset_tag;
+        for (i = start; i < end; i++) {
+            $('#ull').append('<li><img id=barcode' + [i] + '></img></li>');
+            gen([i], [i]);
+
+        }
+
+        var data = {
+
+            asset: end,
+        };
+        reset_counter(data);
+
+
+        PrintElem(elem);
+
+
+
+        });
+
+    function change_user_vali() {
+
+       var user =  document.getElementById("user_list").value;
+       var role =  document.getElementById("role_list").value;
+
+       if (user == "" || role == "") {
+           Materialize.toast("user or role cant be empty", 3000);
+           throw new Error("user or role cant be empty");
+       }
+
+
+    }
+
+    $('#change_user_btn').click(function () {
+
+        change_user_vali();
+        var user = document.getElementById("user_list").value;
+        var role = document.getElementById("role_list").value;
+        var data = {
+             
+            UserName: user,
+           RoleName : role
+        };
+
+        $.getJSON("@Url.Action("RoleAddToUser")", data, function (data) {
+
+            Materialize.toast(data, 3000);
+
+        });
+
+
+    });
+
+    $('#remove_station_btn').click(function () {
+        var station = document.getElementById("remove_station").value;
+        var data = {
+
+            station_name: station ,
+
+        }
+        $.getJSON("@Url.Action("delete_station")", data,function (data) {
+
+            for (var i = 0; i < data.message.length; i++) {
+
+                Materialize.toast(data.message[i], 3000);
+
+            }
+
+            get_coas_station(".station_dropdown");
+        });
+
+    });
+
+    $("#station_btn").click(function () {
+        $('#station_modal').modal('open');
+    });
+
+    $('#reset_btn').click(function () {
+
+        $('#confrim_modal').modal('open');
+
+    });
+
+    function PrintElem(elem) {
+        setTimeout(function () {
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=600');
+
+            mywindow.document.write('<html><head>');
+            mywindow.document.write('</head><style> @@page {size: 99px 57px;margin: 0;} ul{list-style-type: none;} .print:last-child {page-break-after: auto;}</style><body>');
+            mywindow.document.write($('#elem').html());
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            $('#ull').html("");
+            return true;
+
+
+
+        }, 1000);
+
+    }
+
+    function gen(barcode, id_num) {
+
+        JsBarcode("#barcode" + id_num, barcode, {
+            format: "CODE128",
+            fontSize: 15,
+            width: 1,
+            height: 30,
+            displayValue: true
+        });
+
+    }
+
+
+
+</script>

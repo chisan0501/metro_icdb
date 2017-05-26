@@ -1,0 +1,85 @@
+﻿@using Demo.Models
+@model LoginViewModel
+@{
+    Layout = null;
+}
+
+<html>
+
+<head>
+    <link href="~/Content/metro.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="~/Scripts/metro.js"></script>
+    <style>
+        .login-form {
+            width: 25rem;
+            height: 18.75rem;
+            position: fixed;
+            top: 50%;
+            margin-top: -9.375rem;
+            left: 50%;
+            margin-left: -12.5rem;
+            background-color: #ffffff;
+            opacity: 0;
+            -webkit-transform: scale(.8);
+            transform: scale(.8);
+        }
+    </style>
+    <script>
+
+        $(function () {
+            var form = $(".login-form");
+            form.css({
+                opacity: 1,
+                "-webkit-transform": "scale(1)",
+                "transform": "scale(1)",
+                "-webkit-transition": ".5s",
+                "transition": ".5s"
+            });
+        });
+
+    </script>
+
+</head>
+
+
+<body class="bg-darkTeal">
+    <div class="login-form padding20 block-shadow">
+      @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+
+      {
+        @Html.AntiForgeryToken()
+
+            <h1 class="text-light">Login to Demo ICDB</h1>
+            <hr class="thin" />
+            <br />
+            <div class="input-control text full-size" data-role="input">
+                <label for="user_login">User email:</label>
+                <input type="text" name="Email" id='email'>
+                <button class="button helper-button clear"><span class="mif-cross"></span></button>
+            </div>
+            <br />
+            <br />
+            <div class="input-control password full-size" data-role="input">
+                <label for="user_password">User password:</label>
+                <input type="password" name="Password" id='password'>
+                <button class="button helper-button reveal"><span class="mif-looks"></span></button>
+            </div>
+            <br />
+            <br />
+            <div class="form-actions">
+                <button type="submit" class="button primary">Login</button>
+                <a href="@Url.Action("register","account")">Create account</a>
+               
+            </div>
+      }
+    </div>
+
+</body>
+
+
+
+
+ 
+
+</html>

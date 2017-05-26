@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col s12">
+        <nav class="green">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="@Url.Action("index","home")" class="breadcrumb">Home</a>
+                    <a href="@Url.Action("index")" class="breadcrumb">Manage Pallets</a>
+                    <a href="#!" class="breadcrumb">Create Pallet</a>
+                </div>
+            </div>
+        </nav>
+
+        
+    </div>
+    <div class="col s6">
+
+        <div class="input-field col s12">
+            <textarea id="asset_input" class="materialize-textarea" required="required"></textarea>
+            <label for="textarea1">Scan Your Assets Here</label>
+        </div>
+
+    </div>
+    <div class="col s6">
+        <div class="input-field col s6">
+            <i class="material-icons prefix">border_color</i>
+            <input id="pallet_name_input" type="text" class="validate">
+            <label for="icon_prefix">Pallet Name</label>
+        </div>
+
+    </div>
+    <div class="col s12">
+        <a id="validate_btn" class="waves-effect waves-light btn-large red"><i class="material-icons">loop</i>Validate</a>
+        <a id="submit_btn" class="waves-effect waves-light btn-large green disabled"><i class="material-icons left">check</i>Submit</a>
+        </div>
+    </div>
+
+<script>
+    $('#submit_btn').click(function () {
+        var pallet_name = $('#pallet_name_input').val();
+        var asset = $('#asset_input').val().split('\n');
+        var input = asset.filter(function (e) { return e });
+        var jsonObject = {
+            pallet_name: pallet_name,
+            input: input};
+        jQuery.ajaxSettings.traditional = true;
+        $.getJSON("@Url.Action("submit_data")", jsonObject, function (data) {
+            for (var i = 0; i < data.message.length; i++) {
+                Materialize.toast(data.message[i], 5000);
+               
+            }
+            $('#submit_btn').attr('class', 'waves-effect waves-light btn-large green disabled');
+        });
+
+
+
+
+
+       
+    });
+
+    $('#validate_btn').click(function () {
+        var pallet_name = $('#pallet_name_input').val();
+        var pre = $('#asset_input').val();
+        if (!pre) {
+            Materialize.toast('Assets Field cant be Empty', 3000);
+            return;
+        }
+        else if (!pallet_name) {
+            Materialize.toast('Pallet Name Invalid, Please Try Again With Another Name', 3000);
+            return;
+        }
+        var asset = $('#asset_input').val().split('\n');
+        var input = asset.filter(function (e) { return e });
+
+        var jsonObject = {
+            pallet_name: pallet_name,
+            input: input};
+        jQuery.ajaxSettings.traditional = true;
+        $.getJSON("@Url.Action("validate")", jsonObject, function (data) {
+
+            if (data.valid == false) {
+
+                for (var i = 0; i < data.message.length; i++) {
+                    Materialize.toast(data.message[i], 5000);
+                    
+                }
+                $('#submit_btn').attr('class', 'waves-effect waves-light btn-large green disabled');
+            }
+            else {
+                Materialize.toast("Ready", 3000);
+                $('#submit_btn').removeClass('disabled');
+
+            }
+
+        });
+        });
+
+
+
+</script>

@@ -1,0 +1,274 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home";
+}
+
+
+<link href="~/Content/daterangepicker.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.daterangepicker.min.js"></script>
+
+
+<div id="right_charm" data-role="charm">
+    <div class="input-control text" data-role="input">
+        <label>Select Date Range</label>
+        <input id="range" type="text">
+        <button id="date_report" class="button"><span class="mif-search"></span></button>
+    </div>
+    
+</div>
+
+
+<h1 class="leader">Dashboard</h1>
+<div id="loader" data-role="preloader" data-type="metro" data-style="color"></div>
+
+    <div class="tile-container bg-darkCobalt">
+        <div class="tile bg-cyan fg-white" data-role="tile">
+            <div class="tile-content iconic">
+                <span class="icon mif-earth2"></span>
+                <span class="tile-label">Discovery</span>
+                <span id="discovery_num" class="tile-badge bg-darkRed">0</span>
+            </div>
+        </div>
+        <div class="tile bg-cyan fg-white" data-role="tile">
+            <div class="tile-content iconic">
+                <span class="icon mif-user-check"></span>
+                <span class="tile-label">Rediscovery</span>
+                <span id="rediscovery_num" class="tile-badge bg-darkRed">0</span>
+            </div>
+        </div>
+        <div class="tile bg-cyan fg-white" data-role="tile">
+            <div class="tile-content iconic">
+                <span class="icon mif-windows"></span>
+                <span class="tile-label">Imaging</span>
+                <span id="imaging_num" class="tile-badge bg-darkRed">0</span>
+            </div>
+        </div>
+        <div class="tile-wide bg-cyan fg-white" data-role="tile">
+            <div class="tile-content iconic">
+                <span class="icon mif-display"></span>
+                <span class="tile-label">Monitor Discovery</span>
+                <span id="monitor_dis_num" class="tile-badge bg-darkRed">0</span>
+            </div>
+        </div>
+        <div class="tile bg-cyan fg-white" data-role="tile" onclick="toggleMetroCharm('#right_charm', 'top')">
+            <div class="tile-content iconic">
+                <span class="icon mif-calendar"></span>
+                <span class="tile-label">Select Date Range</span>
+                
+            </div>
+        </div>
+        <div class="tile-large tile-big-x tile-wide-y bg-grayLighter fg-black" data-role="tile">
+            <div class="tile-content">
+                <div class="ct-chart ct-golden-section" id="chart1"></div>
+                <span class="tile-label">COA Level</span>
+               
+            </div>
+        </div>
+        <div class="tile-large tile-big-x tile-wide-y bg-grayLighter fg-black" data-role="tile">
+            <div class="tile-content iconic">
+              <div class="ct-chart ct-golden-section" id="production_chart"></div>
+                <span class="tile-label">Production Level</span>
+                
+            </div>
+        </div>
+        <div class="tile-large tile-wide-x tile-wide-y bg-grayLighter fg-black" data-role="tile">
+            <div class="tile-content iconic">
+                <div class="ct-chart ct-golden-section" id="week_discovery_chart"></div>
+                <span class="tile-label">Discovery Level (Weekly)</span>
+
+            </div>
+        </div>
+        <div class="tile-large tile-wide-x tile-wide-y bg-grayLighter fg-black" data-role="tile">
+            <div class="tile-content iconic">
+                <div class="ct-chart ct-golden-section" id="week_rediscovery_chart"></div>
+                <span class="tile-label">Refurb Level (Weekly)</span>
+
+            </div>
+        </div>
+        <div class="tile-large tile-wide-x tile-wide-y bg-grayLighter fg-black" data-role="tile">
+            <div class="tile-content iconic">
+                <div class="ct-chart ct-golden-section" id="week_production_chart"></div>
+                <span class="tile-label">Imaging Level (Weekly)</span>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            
+                var today = moment().format("YYYY-MM-DD");
+
+                var tmr = moment().add(1, 'days').format("YYYY-MM-DD");
+
+                var date = {
+                    from: today, to: tmr
+                }
+                get_date(date);
+               // $('.tooltipped').tooltip({ delay: 50 });
+                $('#range').dateRangePicker();
+            });
+            // Initialize a Line chart in the container with the ID chart2
+
+       
+            $('#date_report').click(function () {
+
+                var ar = $('#range').val();
+                var spli = ar.split('to');
+                var from = spli[0];
+                var to = spli[1];
+
+                var date = {
+                    from: from, to: to
+
+                }
+
+                get_date(date);
+                toggleMetroCharm('#right_charm', 'top');
+            });
+
+
+            //$('.datepicker').pickadate({
+            //    selectMonths: true, // Creates a dropdown to control month
+            //    selectYears: 15 // Creates a dropdown of 15 years to control year
+            //});
+
+
+
+
+            function get_date(date) {
+                $('#loader').show();
+                
+                $.getJSON("@Url.Action("get_data")", date, function (data) {
+                    
+                    $('#preloader').attr('class', 'preloader-wrapper');
+                    $('#discovery_num').text(data.discovery);
+                    $('#rediscovery_num').text(data.rediscovery);
+                    $('#imaging_num').text(data.imaging);
+                    $('#monitor_dis_num').text(data.monitor_data);
+
+                    var dataArr = {
+                        labels: ['S1 TS', 'S2 TS', 'S1 MAR', 'S2 MAR', 'S1 G360', 'S2 G360'],
+                        series: [
+                            [data.tswcoas1, data.tswcoas2, data.marwcoas1, data.marwcoas2, data.g360wcoas1, data.g360wcoas2],
+                            [data.tsocoas1, data.tsocoas2, data.marocoas1, data.marocoas2, data.g360ocoas1, data.g360ocoas2]
+                        ]
+                    };
+
+                    var options = {
+                        seriesBarDistance: 15
+
+                    };
+
+                    var responsiveOptions = [
+                        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+                            seriesBarDistance: 10,
+                            axisX: {
+                                labelInterpolationFnc: function (value) {
+                                    return value;
+                                }
+                            }
+                        }],
+                        ['screen and (max-width: 640px)', {
+                            seriesBarDistance: 5,
+                            axisX: {
+                                labelInterpolationFnc: function (value) {
+                                    return value[0];
+                                }
+                            }
+                        }]
+                    ];
+
+                    new Chartist.Bar('#chart1', dataArr, options, responsiveOptions);
+
+                    //production_level_chart
+                    var pData = [];
+                    var pTime = [];
+
+                    for (var i = 0; i < data.today_production_level.length; i++) {
+
+                        pTime.push(data.today_production_level[i].hours);
+                        pData.push(data.today_production_level[i].num);
+                    }
+                    new Chartist.Line('#production_chart', {
+                        labels: pTime,
+                        series: [
+                            pData,
+
+                        ]
+                    }, {
+                            low: 0,
+                            showArea: true
+                        });
+
+                    var weekPData = [];
+                    var weekPTime = [];
+                    var weekDData = [];
+                    var weekDTime = [];
+                    var weekRData = [];
+                    var weekRTime = [];
+
+
+                    for (var i = 0; i < data.pass7_production_level.length; i++) {
+
+                        weekPTime.push(data.pass7_production_level[i].date);
+                        weekPData.push(data.pass7_production_level[i].num);
+                    }
+                    for (var i = 0; i < data.pass7_discovery_level.length; i++) {
+
+                        weekDTime.push(data.pass7_discovery_level[i].date);
+                        weekDData.push(data.pass7_discovery_level[i].num);
+                    }
+                    for (var i = 0; i < data.pass7_rediscovery_level.length; i++) {
+
+                        weekRTime.push(data.pass7_rediscovery_level[i].date);
+                        weekRData.push(data.pass7_rediscovery_level[i].num);
+                    }
+
+                    //weekly production data chart
+                    new Chartist.Line('#week_production_chart', {
+                        labels: weekPTime,
+                        series: [
+                            weekPData
+                        ]
+                    }, {
+                            low: 0,
+                            showArea: true
+                        });
+                    //weekly discovery data chart
+                    new Chartist.Line('#week_discovery_chart', {
+                        labels: weekDTime,
+                        series: [
+                            weekDData
+                        ]
+                    }, {
+                            low: 0,
+                            showArea: true
+                        });
+                    //weekly rediscovery data chart
+                    new Chartist.Line('#week_rediscovery_chart', {
+                        labels: weekRTime,
+                        series: [
+                            weekRData
+                        ]
+                    }, {
+                            low: 0,
+                            showArea: true
+                        });
+
+                    $('#loader').hide();
+
+                });
+
+
+
+                
+            }
+
+
+
+    </script>
+
+

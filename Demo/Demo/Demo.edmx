@@ -1,0 +1,1028 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="db_a094d4_demoModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="aspnetroles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Discriminator" Type="varchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="aspnetuserclaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="longtext" />
+          <Property Name="ClaimValue" Type="longtext" />
+        </EntityType>
+        <EntityType Name="aspnetuserlogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="aspnetuserroles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="aspnetusers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bool" Nullable="false" />
+          <Property Name="PasswordHash" Type="longtext" />
+          <Property Name="SecurityStamp" Type="longtext" />
+          <Property Name="PhoneNumber" Type="longtext" />
+          <Property Name="PhoneNumberConfirmed" Type="bool" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bool" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" Precision="0" />
+          <Property Name="LockoutEnabled" Type="bool" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="department" Type="varchar" MaxLength="45" />
+          <Property Name="Discriminator" Type="varchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="asset_tag_counter">
+          <Key>
+            <PropertyRef Name="Company" />
+          </Key>
+          <Property Name="Company" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="count" Type="int" />
+        </EntityType>
+        <EntityType Name="coas">
+          <Key>
+            <PropertyRef Name="COA_ID" />
+          </Key>
+          <Property Name="Request_ID" Type="int" />
+          <Property Name="COA_ID" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="Product_Name" Type="char" MaxLength="100" />
+          <Property Name="Pre-existing COA ID" Type="char" MaxLength="100" />
+          <Property Name="License_Type" Type="char" MaxLength="100" />
+          <Property Name="PK" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="PDF_language" Type="char" MaxLength="100" />
+          <Property Name="Recipient_Organization_Name" Type="char" MaxLength="100" />
+          <Property Name="Recipient City" Type="char" MaxLength="100" />
+          <Property Name="Recipient Country / Region" Type="char" MaxLength="100" />
+          <Property Name="Recipient_Type" Type="char" MaxLength="100" />
+          <Property Name="location" Type="varchar" MaxLength="100" />
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="coas_history">
+          <Key>
+            <PropertyRef Name="COA_ID" />
+          </Key>
+          <Property Name="Request_ID" Type="int" />
+          <Property Name="COA_ID" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="Product_Name" Type="char" MaxLength="100" />
+          <Property Name="Pre-existing COA ID" Type="char" MaxLength="100" />
+          <Property Name="License_Type" Type="char" MaxLength="100" />
+          <Property Name="PK" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="PDF_language" Type="char" MaxLength="100" />
+          <Property Name="Recipient_Organization_Name" Type="char" MaxLength="100" />
+          <Property Name="Recipient City" Type="char" MaxLength="100" />
+          <Property Name="Recipient Country / Region" Type="char" MaxLength="100" />
+          <Property Name="Recipient_Type" Type="char" MaxLength="100" />
+          <Property Name="location" Type="varchar" MaxLength="100" />
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="discovery">
+          <Key>
+            <PropertyRef Name="ictag" />
+          </Key>
+          <Property Name="ictag" Type="int" Nullable="false" />
+          <Property Name="time" Type="datetime" Precision="0" />
+          <Property Name="serial" Type="varchar" MaxLength="255" />
+          <Property Name="brand" Type="varchar" MaxLength="45" />
+          <Property Name="model" Type="varchar" MaxLength="45" />
+          <Property Name="cpu" Type="varchar" MaxLength="128" />
+          <Property Name="hdd" Type="varchar" MaxLength="45" />
+          <Property Name="ram" Type="varchar" MaxLength="45" />
+          <Property Name="optical_drive" Type="varchar" MaxLength="100" />
+          <Property Name="location" Type="varchar" MaxLength="45" />
+          <Property Name="has_SSD" Type="char" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="label_log">
+          <Key>
+            <PropertyRef Name="ictags" />
+          </Key>
+          <Property Name="Time" Type="char" MaxLength="100" />
+          <Property Name="serial" Type="char" MaxLength="100" />
+          <Property Name="ictags" Type="int" Nullable="false" />
+          <Property Name="pallet" Type="char" MaxLength="100" />
+          <Property Name="refurbisher" Type="char" MaxLength="100" />
+          <Property Name="Manu" Type="char" MaxLength="100" />
+          <Property Name="Model" Type="char" MaxLength="100" />
+          <Property Name="pre_coa" Type="char" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="label_menu">
+          <Key>
+            <PropertyRef Name="product" />
+          </Key>
+          <Property Name="name" Type="char" MaxLength="50" />
+          <Property Name="product" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="rowID" Type="int" />
+        </EntityType>
+        <EntityType Name="mac_log">
+          <Key>
+            <PropertyRef Name="ictags" />
+          </Key>
+          <Property Name="Time" Type="datetime" Precision="0" />
+          <Property Name="serial" Type="char" MaxLength="100" />
+          <Property Name="ictags" Type="int" Nullable="false" />
+          <Property Name="pallet" Type="char" MaxLength="100" />
+          <Property Name="refurbisher" Type="char" MaxLength="100" />
+          <Property Name="os_version" Type="char" MaxLength="100" />
+          <Property Name="Model" Type="char" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="misc_setting">
+          <Property Name="stations" Type="char" MaxLength="100" />
+          <Property Name="label_log" Type="char" MaxLength="100" />
+        </EntityType>-->
+        <EntityType Name="monitor_log">
+          <Key>
+            <PropertyRef Name="ictag" />
+          </Key>
+          <Property Name="time" Type="datetime" Precision="0" />
+          <Property Name="ictag" Type="int" Nullable="false" />
+          <Property Name="manu" Type="char" MaxLength="100" />
+          <Property Name="monitor_ID" Type="char" MaxLength="100" />
+          <Property Name="serial" Type="char" MaxLength="100" />
+          <Property Name="size" Type="int" />
+          <Property Name="resou" Type="char" MaxLength="100" />
+          <Property Name="model" Type="char" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="monitor_setting">
+          <Key>
+            <PropertyRef Name="manu_wmi" />
+          </Key>
+          <Property Name="manu_wmi" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="manu" Type="char" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="pallet">
+          <Key>
+            <PropertyRef Name="ictags" />
+          </Key>
+          <Property Name="ictags" Type="int" Nullable="false" />
+          <Property Name="pallet_name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="45" />
+          <Property Name="note" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="pallet_master">
+          <Key>
+            <PropertyRef Name="pallet_id" />
+          </Key>
+          <Property Name="pallet_id" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="production_log">
+          <Key>
+            <PropertyRef Name="wcoa" />
+          </Key>
+          <Property Name="time" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="ictags" Type="char" MaxLength="100" />
+          <Property Name="wcoa" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="ocoa" Type="char" MaxLength="100" />
+          <Property Name="Manufacture" Type="char" MaxLength="100" />
+          <Property Name="Model" Type="char" MaxLength="100" />
+          <Property Name="CPU" Type="char" MaxLength="100" />
+          <Property Name="RAM" Type="char" MaxLength="100" />
+          <Property Name="HDD" Type="char" MaxLength="100" />
+          <Property Name="serial" Type="char" MaxLength="100" />
+          <Property Name="channel" Type="char" MaxLength="150" />
+          <Property Name="pre_coa" Type="char" MaxLength="100" />
+          <Property Name="location" Type="char" MaxLength="100" />
+          <Property Name="video_card" Type="char" MaxLength="100" />
+          <Property Name="screen_size" Type="char" MaxLength="100" />
+          <Property Name="bin_location" Type="char" MaxLength="100" />
+          <Property Name="status" Type="char" MaxLength="50" />
+          <Property Name="assign_time" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="rediscovery">
+          <Key>
+            <PropertyRef Name="ictag" />
+          </Key>
+          <Property Name="ictag" Type="int" Nullable="false" />
+          <Property Name="time" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="serial" Type="varchar" MaxLength="255" />
+          <Property Name="brand" Type="varchar" MaxLength="45" />
+          <Property Name="model" Type="varchar" MaxLength="45" />
+          <Property Name="cpu" Type="varchar" MaxLength="128" />
+          <Property Name="hdd" Type="varchar" MaxLength="45" />
+          <Property Name="ram" Type="varchar" MaxLength="45" />
+          <Property Name="optical_drive" Type="varchar" MaxLength="45" />
+          <Property Name="location" Type="varchar" MaxLength="45" />
+          <Property Name="pallet" Type="varchar" MaxLength="45" />
+          <Property Name="pre_coa" Type="varchar" MaxLength="75" />
+          <Property Name="refurbisher" Type="char" MaxLength="100" />
+          <Property Name="status" Type="char" MaxLength="50" />
+          <Property Name="orderNum" Type="char" MaxLength="100" />
+          <Property Name="has_SSD" Type="char" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="scripts">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="text" />
+          <Property Name="name" Type="char" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="setting">
+          <Key>
+            <PropertyRef Name="channel_name" />
+          </Key>
+          <Property Name="channel_name" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="background" Type="char" MaxLength="100" />
+          <Property Name="type" Type="char" MaxLength="100" />
+          <Property Name="full_name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="setting_bol">
+          <Key>
+            <PropertyRef Name="server_address" />
+          </Key>
+          <Property Name="driver_det" Type="varchar" MaxLength="30" />
+          <Property Name="server_address" Type="varchar" MaxLength="120" Nullable="false" />
+        </EntityType>
+        <EntityType Name="station_setting">
+          <Key>
+            <PropertyRef Name="station_dropdown_value" />
+          </Key>
+          <Property Name="station_name" Type="varchar" MaxLength="50" />
+          <Property Name="station_dropdown_value" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="user_name" />
+          </Key>
+          <Property Name="user_name" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="work_status" Type="char" MaxLength="20" />
+          <Property Name="pw" Type="char" MaxLength="20" />
+          <Property Name="role" Type="char" MaxLength="20" />
+        </EntityType>
+        <Association Name="ApplicationUser_Claims">
+          <End Role="aspnetusers" Type="Self.aspnetusers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="aspnetuserclaims" Type="Self.aspnetuserclaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnetusers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="aspnetuserclaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ApplicationUser_Logins">
+          <End Role="aspnetusers" Type="Self.aspnetusers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="aspnetuserlogins" Type="Self.aspnetuserlogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnetusers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="aspnetuserlogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ApplicationUser_Roles">
+          <End Role="aspnetusers" Type="Self.aspnetusers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="aspnetuserroles" Type="Self.aspnetuserroles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnetusers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="aspnetuserroles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdentityRole_Users">
+          <End Role="aspnetroles" Type="Self.aspnetroles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="aspnetuserroles" Type="Self.aspnetuserroles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnetroles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="aspnetuserroles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_a094d4_demoModelStoreContainer">
+          <EntitySet Name="aspnetroles" EntityType="Self.aspnetroles" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="aspnetuserclaims" EntityType="Self.aspnetuserclaims" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="aspnetuserlogins" EntityType="Self.aspnetuserlogins" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="aspnetuserroles" EntityType="Self.aspnetuserroles" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="aspnetusers" EntityType="Self.aspnetusers" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="asset_tag_counter" EntityType="Self.asset_tag_counter" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="coas" EntityType="Self.coas" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="coas_history" EntityType="Self.coas_history" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="discovery" EntityType="Self.discovery" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="label_log" EntityType="Self.label_log" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="label_menu" EntityType="Self.label_menu" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="mac_log" EntityType="Self.mac_log" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="monitor_log" EntityType="Self.monitor_log" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="monitor_setting" EntityType="Self.monitor_setting" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="pallet" EntityType="Self.pallet" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="pallet_master" EntityType="Self.pallet_master" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="production_log" EntityType="Self.production_log" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="rediscovery" EntityType="Self.rediscovery" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="scripts" EntityType="Self.scripts" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="setting" EntityType="Self.setting" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="setting_bol" EntityType="Self.setting_bol" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="station_setting" EntityType="Self.station_setting" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="db_a094d4_demo" store:Type="Tables" />
+          <AssociationSet Name="ApplicationUser_Claims" Association="Self.ApplicationUser_Claims">
+            <End Role="aspnetusers" EntitySet="aspnetusers" />
+            <End Role="aspnetuserclaims" EntitySet="aspnetuserclaims" />
+          </AssociationSet>
+          <AssociationSet Name="ApplicationUser_Logins" Association="Self.ApplicationUser_Logins">
+            <End Role="aspnetusers" EntitySet="aspnetusers" />
+            <End Role="aspnetuserlogins" EntitySet="aspnetuserlogins" />
+          </AssociationSet>
+          <AssociationSet Name="ApplicationUser_Roles" Association="Self.ApplicationUser_Roles">
+            <End Role="aspnetusers" EntitySet="aspnetusers" />
+            <End Role="aspnetuserroles" EntitySet="aspnetuserroles" />
+          </AssociationSet>
+          <AssociationSet Name="IdentityRole_Users" Association="Self.IdentityRole_Users">
+            <End Role="aspnetroles" EntitySet="aspnetroles" />
+            <End Role="aspnetuserroles" EntitySet="aspnetuserroles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_a094d4_demoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="aspnetroles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="aspnetusers" Relationship="Self.aspnetuserroles" FromRole="aspnetroles" ToRole="aspnetusers" />
+        </EntityType>
+        <EntityType Name="aspnetuserclaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClaimType" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="ClaimValue" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="aspnetusers" Relationship="Self.ApplicationUser_Claims" FromRole="aspnetuserclaims" ToRole="aspnetusers" />
+        </EntityType>
+        <EntityType Name="aspnetuserlogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="aspnetusers" Relationship="Self.ApplicationUser_Logins" FromRole="aspnetuserlogins" ToRole="aspnetusers" />
+        </EntityType>
+        <EntityType Name="aspnetusers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="department" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="aspnetuserclaims" Relationship="Self.ApplicationUser_Claims" FromRole="aspnetusers" ToRole="aspnetuserclaims" />
+          <NavigationProperty Name="aspnetuserlogins" Relationship="Self.ApplicationUser_Logins" FromRole="aspnetusers" ToRole="aspnetuserlogins" />
+          <NavigationProperty Name="aspnetroles" Relationship="Self.aspnetuserroles" FromRole="aspnetusers" ToRole="aspnetroles" />
+        </EntityType>
+        <EntityType Name="asset_tag_counter">
+          <Key>
+            <PropertyRef Name="Company" />
+          </Key>
+          <Property Name="Company" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="count" Type="Int32" />
+        </EntityType>
+        <EntityType Name="coas">
+          <Key>
+            <PropertyRef Name="COA_ID" />
+          </Key>
+          <Property Name="Request_ID" Type="Int32" />
+          <Property Name="COA_ID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Product_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Pre_existing_COA_ID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="License_Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PDF_language" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_Organization_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_Country___Region" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="coas_history">
+          <Key>
+            <PropertyRef Name="COA_ID" />
+          </Key>
+          <Property Name="Request_ID" Type="Int32" />
+          <Property Name="COA_ID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Product_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Pre_existing_COA_ID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="License_Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PDF_language" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_Organization_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_Country___Region" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Recipient_Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="discovery">
+          <Key>
+            <PropertyRef Name="ictag" />
+          </Key>
+          <Property Name="ictag" Type="Int32" Nullable="false" />
+          <Property Name="time" Type="DateTime" />
+          <Property Name="serial" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="brand" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="model" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="cpu" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="hdd" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="ram" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="optical_drive" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="has_SSD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="label_log">
+          <Key>
+            <PropertyRef Name="ictags" />
+          </Key>
+          <Property Name="Time" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="serial" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ictags" Type="Int32" Nullable="false" />
+          <Property Name="pallet" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="refurbisher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Manu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="pre_coa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="label_menu">
+          <Key>
+            <PropertyRef Name="product" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="product" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rowID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="mac_log">
+          <Key>
+            <PropertyRef Name="ictags" />
+          </Key>
+          <Property Name="Time" Type="DateTime" />
+          <Property Name="serial" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ictags" Type="Int32" Nullable="false" />
+          <Property Name="pallet" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="refurbisher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="os_version" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="monitor_log">
+          <Key>
+            <PropertyRef Name="ictag" />
+          </Key>
+          <Property Name="time" Type="DateTime" />
+          <Property Name="ictag" Type="Int32" Nullable="false" />
+          <Property Name="manu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="monitor_ID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="serial" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="size" Type="Int32" />
+          <Property Name="resou" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="monitor_setting">
+          <Key>
+            <PropertyRef Name="manu_wmi" />
+          </Key>
+          <Property Name="manu_wmi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="manu" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pallet">
+          <Key>
+            <PropertyRef Name="ictags" />
+          </Key>
+          <Property Name="ictags" Type="Int32" Nullable="false" />
+          <Property Name="pallet_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="note" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pallet_master">
+          <Key>
+            <PropertyRef Name="pallet_id" />
+          </Key>
+          <Property Name="pallet_id" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="production_log">
+          <Key>
+            <PropertyRef Name="wcoa" />
+          </Key>
+          <Property Name="time" Type="DateTime" Nullable="false" />
+          <Property Name="ictags" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="wcoa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ocoa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Manufacture" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CPU" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="RAM" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="HDD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="serial" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="channel" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="pre_coa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="video_card" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="screen_size" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="bin_location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="assign_time" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="rediscovery">
+          <Key>
+            <PropertyRef Name="ictag" />
+          </Key>
+          <Property Name="ictag" Type="Int32" Nullable="false" />
+          <Property Name="time" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="serial" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="brand" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="model" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="cpu" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="hdd" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="ram" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="optical_drive" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="pallet" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="pre_coa" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="refurbisher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="orderNum" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="has_SSD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="setting">
+          <Key>
+            <PropertyRef Name="channel_name" />
+          </Key>
+          <Property Name="channel_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="background" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="setting_bol">
+          <Key>
+            <PropertyRef Name="server_address" />
+          </Key>
+          <Property Name="driver_det" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="server_address" Type="String" MaxLength="120" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="station_setting">
+          <Key>
+            <PropertyRef Name="station_dropdown_value" />
+          </Key>
+          <Property Name="station_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="station_dropdown_value" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="user_name" />
+          </Key>
+          <Property Name="user_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="work_status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="pw" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="ApplicationUser_Claims">
+          <End Role="aspnetusers" Type="Self.aspnetusers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="aspnetuserclaims" Type="Self.aspnetuserclaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnetusers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="aspnetuserclaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ApplicationUser_Logins">
+          <End Role="aspnetusers" Type="Self.aspnetusers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="aspnetuserlogins" Type="Self.aspnetuserlogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnetusers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="aspnetuserlogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="aspnetuserroles">
+          <End Role="aspnetusers" Type="Self.aspnetusers" Multiplicity="*" />
+          <End Role="aspnetroles" Type="Self.aspnetroles" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="db_a094d4_demoEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="aspnetroles" EntityType="Self.aspnetroles" />
+          <EntitySet Name="aspnetuserclaims" EntityType="Self.aspnetuserclaims" />
+          <EntitySet Name="aspnetuserlogins" EntityType="Self.aspnetuserlogins" />
+          <EntitySet Name="aspnetusers" EntityType="Self.aspnetusers" />
+          <EntitySet Name="asset_tag_counter" EntityType="Self.asset_tag_counter" />
+          <EntitySet Name="coas" EntityType="Self.coas" />
+          <EntitySet Name="coas_history" EntityType="Self.coas_history" />
+          <EntitySet Name="discovery" EntityType="Self.discovery" />
+          <EntitySet Name="label_log" EntityType="Self.label_log" />
+          <EntitySet Name="label_menu" EntityType="Self.label_menu" />
+          <EntitySet Name="mac_log" EntityType="Self.mac_log" />
+          <EntitySet Name="monitor_log" EntityType="Self.monitor_log" />
+          <EntitySet Name="monitor_setting" EntityType="Self.monitor_setting" />
+          <EntitySet Name="pallet" EntityType="Self.pallet" />
+          <EntitySet Name="pallet_master" EntityType="Self.pallet_master" />
+          <EntitySet Name="production_log" EntityType="Self.production_log" />
+          <EntitySet Name="rediscovery" EntityType="Self.rediscovery" />
+          <EntitySet Name="setting" EntityType="Self.setting" />
+          <EntitySet Name="setting_bol" EntityType="Self.setting_bol" />
+          <EntitySet Name="station_setting" EntityType="Self.station_setting" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <AssociationSet Name="ApplicationUser_Claims" Association="Self.ApplicationUser_Claims">
+            <End Role="aspnetusers" EntitySet="aspnetusers" />
+            <End Role="aspnetuserclaims" EntitySet="aspnetuserclaims" />
+          </AssociationSet>
+          <AssociationSet Name="ApplicationUser_Logins" Association="Self.ApplicationUser_Logins">
+            <End Role="aspnetusers" EntitySet="aspnetusers" />
+            <End Role="aspnetuserlogins" EntitySet="aspnetuserlogins" />
+          </AssociationSet>
+          <AssociationSet Name="aspnetuserroles" Association="Self.aspnetuserroles">
+            <End Role="aspnetusers" EntitySet="aspnetusers" />
+            <End Role="aspnetroles" EntitySet="aspnetroles" />
+          </AssociationSet>
+          <EntitySet Name="scripts" EntityType="db_a094d4_demoModel.scripts" />
+        </EntityContainer>
+        <EntityType Name="scripts">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_a094d4_demoModelStoreContainer" CdmEntityContainer="db_a094d4_demoEntities1">
+          <EntitySetMapping Name="aspnetroles">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.aspnetroles">
+              <MappingFragment StoreEntitySet="aspnetroles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="aspnetuserclaims">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.aspnetuserclaims">
+              <MappingFragment StoreEntitySet="aspnetuserclaims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="aspnetuserlogins">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.aspnetuserlogins">
+              <MappingFragment StoreEntitySet="aspnetuserlogins">
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="aspnetusers">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.aspnetusers">
+              <MappingFragment StoreEntitySet="aspnetusers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="asset_tag_counter">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.asset_tag_counter">
+              <MappingFragment StoreEntitySet="asset_tag_counter">
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="count" ColumnName="count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="coas">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.coas">
+              <MappingFragment StoreEntitySet="coas">
+                <ScalarProperty Name="Request_ID" ColumnName="Request_ID" />
+                <ScalarProperty Name="COA_ID" ColumnName="COA_ID" />
+                <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+                <ScalarProperty Name="Pre_existing_COA_ID" ColumnName="Pre-existing COA ID" />
+                <ScalarProperty Name="License_Type" ColumnName="License_Type" />
+                <ScalarProperty Name="PK" ColumnName="PK" />
+                <ScalarProperty Name="PDF_language" ColumnName="PDF_language" />
+                <ScalarProperty Name="Recipient_Organization_Name" ColumnName="Recipient_Organization_Name" />
+                <ScalarProperty Name="Recipient_City" ColumnName="Recipient City" />
+                <ScalarProperty Name="Recipient_Country___Region" ColumnName="Recipient Country / Region" />
+                <ScalarProperty Name="Recipient_Type" ColumnName="Recipient_Type" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="coas_history">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.coas_history">
+              <MappingFragment StoreEntitySet="coas_history">
+                <ScalarProperty Name="Request_ID" ColumnName="Request_ID" />
+                <ScalarProperty Name="COA_ID" ColumnName="COA_ID" />
+                <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+                <ScalarProperty Name="Pre_existing_COA_ID" ColumnName="Pre-existing COA ID" />
+                <ScalarProperty Name="License_Type" ColumnName="License_Type" />
+                <ScalarProperty Name="PK" ColumnName="PK" />
+                <ScalarProperty Name="PDF_language" ColumnName="PDF_language" />
+                <ScalarProperty Name="Recipient_Organization_Name" ColumnName="Recipient_Organization_Name" />
+                <ScalarProperty Name="Recipient_City" ColumnName="Recipient City" />
+                <ScalarProperty Name="Recipient_Country___Region" ColumnName="Recipient Country / Region" />
+                <ScalarProperty Name="Recipient_Type" ColumnName="Recipient_Type" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="discovery">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.discovery">
+              <MappingFragment StoreEntitySet="discovery">
+                <ScalarProperty Name="ictag" ColumnName="ictag" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="serial" ColumnName="serial" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="cpu" ColumnName="cpu" />
+                <ScalarProperty Name="hdd" ColumnName="hdd" />
+                <ScalarProperty Name="ram" ColumnName="ram" />
+                <ScalarProperty Name="optical_drive" ColumnName="optical_drive" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="has_SSD" ColumnName="has_SSD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="label_log">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.label_log">
+              <MappingFragment StoreEntitySet="label_log">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="serial" ColumnName="serial" />
+                <ScalarProperty Name="ictags" ColumnName="ictags" />
+                <ScalarProperty Name="pallet" ColumnName="pallet" />
+                <ScalarProperty Name="refurbisher" ColumnName="refurbisher" />
+                <ScalarProperty Name="Manu" ColumnName="Manu" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="pre_coa" ColumnName="pre_coa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="label_menu">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.label_menu">
+              <MappingFragment StoreEntitySet="label_menu">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="product" ColumnName="product" />
+                <ScalarProperty Name="rowID" ColumnName="rowID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mac_log">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.mac_log">
+              <MappingFragment StoreEntitySet="mac_log">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="serial" ColumnName="serial" />
+                <ScalarProperty Name="ictags" ColumnName="ictags" />
+                <ScalarProperty Name="pallet" ColumnName="pallet" />
+                <ScalarProperty Name="refurbisher" ColumnName="refurbisher" />
+                <ScalarProperty Name="os_version" ColumnName="os_version" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="monitor_log">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.monitor_log">
+              <MappingFragment StoreEntitySet="monitor_log">
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="ictag" ColumnName="ictag" />
+                <ScalarProperty Name="manu" ColumnName="manu" />
+                <ScalarProperty Name="monitor_ID" ColumnName="monitor_ID" />
+                <ScalarProperty Name="serial" ColumnName="serial" />
+                <ScalarProperty Name="size" ColumnName="size" />
+                <ScalarProperty Name="resou" ColumnName="resou" />
+                <ScalarProperty Name="model" ColumnName="model" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="monitor_setting">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.monitor_setting">
+              <MappingFragment StoreEntitySet="monitor_setting">
+                <ScalarProperty Name="manu_wmi" ColumnName="manu_wmi" />
+                <ScalarProperty Name="manu" ColumnName="manu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pallet">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.pallet">
+              <MappingFragment StoreEntitySet="pallet">
+                <ScalarProperty Name="ictags" ColumnName="ictags" />
+                <ScalarProperty Name="pallet_name" ColumnName="pallet_name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="note" ColumnName="note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pallet_master">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.pallet_master">
+              <MappingFragment StoreEntitySet="pallet_master">
+                <ScalarProperty Name="pallet_id" ColumnName="pallet_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="production_log">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.production_log">
+              <MappingFragment StoreEntitySet="production_log">
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="ictags" ColumnName="ictags" />
+                <ScalarProperty Name="wcoa" ColumnName="wcoa" />
+                <ScalarProperty Name="ocoa" ColumnName="ocoa" />
+                <ScalarProperty Name="Manufacture" ColumnName="Manufacture" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="CPU" ColumnName="CPU" />
+                <ScalarProperty Name="RAM" ColumnName="RAM" />
+                <ScalarProperty Name="HDD" ColumnName="HDD" />
+                <ScalarProperty Name="serial" ColumnName="serial" />
+                <ScalarProperty Name="channel" ColumnName="channel" />
+                <ScalarProperty Name="pre_coa" ColumnName="pre_coa" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="video_card" ColumnName="video_card" />
+                <ScalarProperty Name="screen_size" ColumnName="screen_size" />
+                <ScalarProperty Name="bin_location" ColumnName="bin_location" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="assign_time" ColumnName="assign_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rediscovery">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.rediscovery">
+              <MappingFragment StoreEntitySet="rediscovery">
+                <ScalarProperty Name="ictag" ColumnName="ictag" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="serial" ColumnName="serial" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="cpu" ColumnName="cpu" />
+                <ScalarProperty Name="hdd" ColumnName="hdd" />
+                <ScalarProperty Name="ram" ColumnName="ram" />
+                <ScalarProperty Name="optical_drive" ColumnName="optical_drive" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="pallet" ColumnName="pallet" />
+                <ScalarProperty Name="pre_coa" ColumnName="pre_coa" />
+                <ScalarProperty Name="refurbisher" ColumnName="refurbisher" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="orderNum" ColumnName="orderNum" />
+                <ScalarProperty Name="has_SSD" ColumnName="has_SSD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="setting">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.setting">
+              <MappingFragment StoreEntitySet="setting">
+                <ScalarProperty Name="channel_name" ColumnName="channel_name" />
+                <ScalarProperty Name="background" ColumnName="background" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="setting_bol">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.setting_bol">
+              <MappingFragment StoreEntitySet="setting_bol">
+                <ScalarProperty Name="driver_det" ColumnName="driver_det" />
+                <ScalarProperty Name="server_address" ColumnName="server_address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="station_setting">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.station_setting">
+              <MappingFragment StoreEntitySet="station_setting">
+                <ScalarProperty Name="station_name" ColumnName="station_name" />
+                <ScalarProperty Name="station_dropdown_value" ColumnName="station_dropdown_value" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="work_status" ColumnName="work_status" />
+                <ScalarProperty Name="pw" ColumnName="pw" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="aspnetuserroles" TypeName="db_a094d4_demoModel.aspnetuserroles" StoreEntitySet="aspnetuserroles">
+            <EndProperty Name="aspnetusers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="aspnetroles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="scripts">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.scripts">
+              <MappingFragment StoreEntitySet="scripts">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

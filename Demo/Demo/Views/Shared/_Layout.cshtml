@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="~/Scripts/moment.js"></script>
+    <link href="~/Content/metro.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="~/Scripts/metro.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    @*<link href="~/Content/materialize.css" rel="stylesheet" />
+    <script src="~/Scripts/materialize.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">*@
+
+    <link href="~/Content/metro-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="~/Scripts/pdfmake.min.js"></script>
+    <script src="~/Scripts/vfs_fonts.js"></script>
+    <script src="~/Scripts/JsBarcode.all.min.js"></script>
+    <script src="~/Scripts/papaparse.min.js"></script>
+    <link href="~/Content/dataTables.material.min.css" rel="stylesheet" />
+</head>
+<style type="text/css">
+   #left_content{
+        height:93vh;
+        font-size:2em;
+    }
+    input[type="search"] {
+height: 64px !important; /* or height of nav */
+}
+</style>
+    
+<body>
+    
+
+    
+    <div class="app-bar" data-role="appbar" data-flexstyle="sidebar2">
+
+        <a class="app-bar-element branding">DEMO ICDB Lite</a>
+
+        <ul class="app-bar-menu">
+
+            <li><a href="@Url.Action("index", "home")" class="">Dashboard</a></li>
+
+            <li>
+                <a class="dropdown-toggle">Production Data</a>
+                <ul class="d-menu" data-role="dropdown">
+                    <li><a href="@Url.Action("index", "discoveries")" class="">Discovery</a></li>
+                    <li><a href="@Url.Action("index", "rediscoveries")" class="">Rediscovery</a></li>
+                    <li><a href="@Url.Action("index", "production_log")" class="">Imaging</a></li>
+                    <li><a href="@Url.Action("index", "monitor_log")" class="">Monitor Discovery</a></li>
+
+                </ul>
+            </li>
+
+            <li><a href="@Url.Action("index", "pallets")">Pallets</a></li>
+            <li><a href="@Url.Action("home", "report")" class="">Report</a></li>
+            <li><a href="@Url.Action("index", "manage")" class="">Settings</a></li>
+
+
+
+        </ul>
+        <div class="app-bar-pullbutton automatic"></div>
+        <ul class="app-bar-menu place-right" data-flexdirection="reverse">
+            <li>
+                <div class="input-control text">
+                    <form id="search_form">
+                        <input id="top_search_bar" type="text" placeholder="Search...">
+                        </form>
+</div>
+            </li>
+            <li>
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
+                }
+
+            </li>
+
+        </ul>
+    </div>
+       
+   
+    <div class="container page-content">
+        @RenderBody()
+    </div>
+
+
+    
+   
+
+    <!-- Modal Trigger -->
+
+
+    <!-- Modal Structure -->
+    
+    
+</body>
+<script>
+   
+   
+
+    $("#search_form").submit(function (event) {
+
+
+
+        event.preventDefault();
+
+        var asset_tag = $('#top_search_bar').val();
+        
+        var link = "@Url.Action("search_result","home",new { asset_tag = "123" })";
+        link = link.replace("123", asset_tag);
+
+
+        window.location.href = link;
+
+
+
+
+    });
+
+
+</script>
