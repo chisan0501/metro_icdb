@@ -4,56 +4,51 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link href="~/Content/daterangepicker.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.daterangepicker.min.js"></script>
 
+
+<h2 class="leader">Download Report</h2>
+<hr />
+<br />
+<br />
 
 <div class="row">
-    <div class="col s12">
-        <h3 class="header">Report</h3>
-    </div>
-    <div class="col s6">
-        <label for="report_from" class="active">From</label>
-        <input id="report_from" type="date" class="datepicker">
-    </div>
-    <div class="col s6">
-        <label for="report_to" class="active">To</label>
-        <input id="report_to" type="date" class="datepicker">
-    </div>
-    <div class="col s3">
-        <a id="down_report" class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">get_app</i></a>
+    
 
+    <div class="input-control text" data-role="input">
+        <label>Select Date Range</label>
+        <input id="range" type="text">
+        <button id="date_report" class="button"><span class="mif-search"></span></button>
     </div>
+
+   
 </div>
 
 <script>
-    $('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15 // Creates a dropdown of 15 years to control year
-    });
+    $('#range').dateRangePicker();
+    $('#date_report').click(function () {
 
-    $('#down_report').click(function () {
-        var from_time = $('#report_from').val();
-        var to_time = $('#report_to').val();
-
-        if (!to_time) {
-            to_time = from_time;
-        }
-
+        var ar = $('#range').val();
+        var spli = ar.split('to');
+        var from = spli[0];
+        var to = spli[1];
 
         var data = {
-            from_time: from_time,
-            to_time : to_time
+            from_time: from, to_time: to
+
         }
-        $.getJSON("@Url.Action("gen_report")", data, function (data) {
+  $.getJSON("@Url.Action("gen_report")", data, function (data) {
 
             data.date_from = moment(data.date_from).format("YYYY/MM/DD");
             data.date_to = moment(data.date_to).format("YYYY/MM/DD");
 
-            
+
             var discovery_detail = [];
             discovery_detail.push(["Asset Tag","Serial #","Manufacture","CPU","RAM","HDD"]);
             for (var i = 0; i< data.discovery.length; i++) {
                 var row = new Array();
-             
+
                 row.push(data.discovery[i].ictag);
                 row.push(data.discovery[i].serial);
                 row.push(data.discovery[i].brand);
@@ -71,7 +66,7 @@
                 row.push(data.rediscovery[i].ictag);
                 row.push(data.rediscovery[i].serial);
                 row.push(data.rediscovery[i].pallet);
-              
+
 
                 rediscovery_detail.push(row);
             }
@@ -89,7 +84,7 @@
             var sku_table = [];
             sku_table.push(["SKU","# of Machines"]);
             for (var i = 0; i < data.sku_count.length; i++) {
-                var row = new Array();            
+                var row = new Array();
                 row.push(data.sku_count[i].SKU);
                 row.push(data.sku_count[i].Count);
                 sku_table.push(row);
@@ -134,7 +129,7 @@
                         table: {
                             body: [
                                 ['', 'Windows COAs','Office COAs'],
-                                
+
                                 [data.date_from + ' - ' + data.date_to, data.wcoa_count,data.ocoa_count]
                             ]
                         }
@@ -162,12 +157,12 @@
                     },
 
                     { text: 'Discovery Data Detail', pageBreak: 'before', style: 'header', margin: [0, 20, 0, 8]},
-                   
+
                     {
                         style: 'table',
                         table: {
                             body: discovery_detail,
-                            
+
                         }
                     },
                     { text: 'Rediscovery Data Detail', pageBreak: 'before', style: 'header', margin: [0, 20, 0, 8]},
@@ -210,9 +205,14 @@
             pdfMake.createPdf(dd).download('report.pdf');
         });
 
+
     });
 
 
+
+
    
+
+
 
 </script>

@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "coas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="leader">Add/Remove COAs</h1>
+<br />
+<hr />
+<div id="loader" data-role="preloader" data-type="metro" data-style="color"></div>
+<div class="panel">
+    <div class="heading">
+        <span class="icon mif-plus"></span>
+        <span class="title">Add COAS</span>
+    </div>
+    <div class="content padding10">
+        <h4 class="sub-header">Upload COAs CSV</h4>
+        <div class="input-control select">
+            <select id="station">
+                
+               
+            </select>
+
+        </div>
+        <div class="input-control file" data-role="input">
+            <input id="coa_csv_upload" type="file" accept=".csv">
+            <button class="button"><span class="mif-folder"></span></button>
+
+        </div>
+        <button id="upload_btn" class="square-button"><span class="mif-upload"></span></button>
+        <div class="accordion" data-role="accordion">
+            <div class="frame active">
+                <div class="heading">Message<span class="mif-warning icon"></span></div>
+                <div id="message_content" class="content">
+                  
+                </div>
+            </div>
+
+        </div>
+</div>
+
+<script>
+    $('#loader').hide();
+    get_coas_station("#station");
+    function importCsvCheck() {
+
+        var station = $("#station option:selected").text();
+        var file_path = $('#coa_csv_upload').val(); 
+        if (station == "" || file_path == "") {
+            $.Notify({
+                caption: 'Error',
+                content: 'Station or File cant be Empty'
+            });
+           
+            throw new Error("Station or file cant be empty");
+        }
+
+    }
+
+       function get_coas_station(dropdownID) {
+        $.getJSON("@Url.Action("get_coas_station")", function (data) {
+
+            $(dropdownID).html("");
+            
+
+            $(dropdownID).html($("<option value='' disabled selected>Select Station</option>"));
+            for (var i = 0; i < data.length; i++) {
+
+                $(dropdownID).append($("<option></option>").attr("value", data[i]).text(data[i]));
+
+            }
+
+        });
+
+
+    }
+       var csv_file;
+       function handleFileSelect(evt) {
+
+           csv_file = evt.target.files[0];
+          
+
+       }
+
+       $("#coa_csv_upload").change(handleFileSelect);
+       $("#upload_btn").click(function () {
+           $('#loader').show();
+            importCsvCheck();
+     
+
+
+        var csv_json;
+        Papa.parse(csv_file, {
+            header: true,
+            skipEmptyLines:true,
+            dynamicTyping: true,
+            beforeFirstChunk: function (chunk) {
+
+
+                var rows = chunk.split(/\r\n|\r|\n/);
+
+                rows[0] = rows[0].replace("/", "");
+                rows[0] = rows[0].replace("-", "");
+                rows[0] = rows[0].replace(/ /g, "");
+
+
+                return rows.join("\r\n");
+            },
+            complete: function (results) {
+                csv_json = results;
+
+
+
+
+                $.ajax({
+                url: "@Url.Action("import_coa")",
+                    type: "POST",
+                    data: JSON.stringify(csv_json.data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (response) {
+                        $.Notify({
+                            caption: 'Message',
+                            content: response.responseText,
+                        });
+                        
+                    },
+                    success: function (data) {
+                        $('#loader').hide();
+                        $('#message_content').html("");
+                        for (var i = 0; i < data.message.length; i++) {
+
+                            $('#message_content').append("<p>"+data.message[i]+"</p>");
+                           
+                           
+                        }
+
+                    }
+                });
+
+            }
+        });
+
+        
+
+    });
+
+</script>

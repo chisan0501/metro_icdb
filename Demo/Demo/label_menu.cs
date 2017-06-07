@@ -16,6 +16,7 @@ namespace Demo
     {
         public string name { get; set; }
         public string product { get; set; }
-        public Nullable<int> rowID { get; set; }
+        public string special_sku { get; set; }
+        public string disable_grade { get; set; }
     }
 }

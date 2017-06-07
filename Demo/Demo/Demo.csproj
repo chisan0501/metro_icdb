@@ -267,9 +267,18 @@
     <Compile Include="mac_log.cs">
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
+    <Compile Include="magento_html.cs">
+      <DependentUpon>Demo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="magento_listing.cs" />
+    <Compile Include="magento_sku.cs" />
+    <Compile Include="magento_sku_brand.cs">
+      <DependentUpon>Demo.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\COAs_model.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LabelModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SQLModel.cs" />
     <Compile Include="monitor_log.cs">
@@ -278,6 +287,7 @@
     <Compile Include="monitor_setting.cs">
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
+    <Compile Include="Mysql_DataProvider.cs" />
     <Compile Include="pallet.cs">
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
@@ -288,6 +298,11 @@
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="rediscovery.cs">
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
@@ -300,6 +315,7 @@
     <Compile Include="setting_bol.cs">
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
+    <Compile Include="smart_sku.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\discoveriesController.cs" />
     <Compile Include="station_setting.cs">
@@ -308,21 +324,85 @@
     <Compile Include="users.cs">
       <DependentUpon>Demo.tt</DependentUpon>
     </Compile>
+    <Compile Include="Web References\org.connectall\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\basic\close.png" />
+    <Content Include="Content\basic\column-asc.png" />
+    <Content Include="Content\basic\column-desc.png" />
+    <Content Include="Content\basic\column-sortable.png" />
+    <Content Include="Content\basic\delete.png" />
+    <Content Include="Content\basic\edit.png" />
+    <Content Include="Content\basic\jtable_basic.css" />
+    <Content Include="Content\basic\jtable_basic.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\dataTables.material.min.css" />
     <Content Include="Content\daterangepicker.css" />
     <Content Include="Content\daterangepicker.min.css" />
     <Content Include="Content\interconnection-org-logo-co.jpg" />
+    <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\jqueryui\add.png" />
+    <Content Include="Content\jqueryui\bg-thead.png" />
+    <Content Include="Content\jqueryui\close.png" />
+    <Content Include="Content\jqueryui\column-asc.png" />
+    <Content Include="Content\jqueryui\column-desc.png" />
+    <Content Include="Content\jqueryui\column-sortable.png" />
+    <Content Include="Content\jqueryui\delete.png" />
+    <Content Include="Content\jqueryui\edit.png" />
+    <Content Include="Content\jqueryui\jtable_jqueryui.css" />
+    <Content Include="Content\jqueryui\jtable_jqueryui.min.css" />
+    <Content Include="Content\jqueryui\loading.gif" />
     <Content Include="Content\jsgrid-theme.css" />
     <Content Include="Content\jsgrid.css" />
     <Content Include="Content\material.min.css" />
     <Content Include="Content\materialize.css" />
     <Content Include="Content\metro-icons.css" />
     <Content Include="Content\metro.css" />
+    <Content Include="Content\metro\add.png" />
+    <Content Include="Content\metro\blue\jtable.css" />
+    <Content Include="Content\metro\blue\jtable.min.css" />
+    <Content Include="Content\metro\blue\loading.gif" />
+    <Content Include="Content\metro\brown\jtable.css" />
+    <Content Include="Content\metro\brown\jtable.min.css" />
+    <Content Include="Content\metro\brown\loading.gif" />
+    <Content Include="Content\metro\close.png" />
+    <Content Include="Content\metro\column-asc.png" />
+    <Content Include="Content\metro\column-desc.png" />
+    <Content Include="Content\metro\column-sortable.png" />
+    <Content Include="Content\metro\crimson\jtable.css" />
+    <Content Include="Content\metro\crimson\jtable.min.css" />
+    <Content Include="Content\metro\crimson\loading.gif" />
+    <Content Include="Content\metro\darkgray\jtable.css" />
+    <Content Include="Content\metro\darkgray\jtable.min.css" />
+    <Content Include="Content\metro\darkgray\loading.gif" />
+    <Content Include="Content\metro\darkorange\jtable.css" />
+    <Content Include="Content\metro\darkorange\jtable.min.css" />
+    <Content Include="Content\metro\darkorange\loading.gif" />
+    <Content Include="Content\metro\delete.png" />
+    <Content Include="Content\metro\edit.png" />
+    <Content Include="Content\metro\green\jtable.css" />
+    <Content Include="Content\metro\green\jtable.min.css" />
+    <Content Include="Content\metro\green\loading.gif" />
+    <Content Include="Content\metro\jtable_metro_base.css" />
+    <Content Include="Content\metro\jtable_metro_base.min.css" />
+    <Content Include="Content\metro\lightgray\jtable.css" />
+    <Content Include="Content\metro\lightgray\jtable.min.css" />
+    <Content Include="Content\metro\lightgray\loading.gif" />
+    <Content Include="Content\metro\pink\jtable.css" />
+    <Content Include="Content\metro\pink\jtable.min.css" />
+    <Content Include="Content\metro\pink\loading.gif" />
+    <Content Include="Content\metro\purple\jtable.css" />
+    <Content Include="Content\metro\purple\jtable.min.css" />
+    <Content Include="Content\metro\purple\loading.gif" />
+    <Content Include="Content\metro\red\jtable.css" />
+    <Content Include="Content\metro\red\jtable.min.css" />
+    <Content Include="Content\metro\red\loading.gif" />
     <Content Include="Demo.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Demo.edmx</DependentUpon>
@@ -355,17 +435,37 @@
     <Content Include="fonts\metro.ttf" />
     <Content Include="fonts\metro.woff" />
     <Content Include="fonts\selection.json" />
+    <Content Include="Content\metro\blue\jtable.less" />
+    <Content Include="Content\metro\brown\jtable.less" />
+    <Content Include="Content\metro\crimson\jtable.less" />
+    <Content Include="Content\metro\darkgray\jtable.less" />
+    <Content Include="Content\metro\darkorange\jtable.less" />
+    <Content Include="Content\metro\green\jtable.less" />
+    <Content Include="Content\metro\jtable_metro_base.less" />
+    <Content Include="Content\metro\lightgray\jtable.less" />
+    <Content Include="Content\metro\pink\jtable.less" />
+    <Content Include="Content\metro\purple\jtable.less" />
+    <Content Include="Content\metro\red\jtable.less" />
+    <Content Include="Content\basic\jtable_basic.less" />
+    <Content Include="Content\jqueryui\jtable_jqueryui.less" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dataTables.material.min.js" />
     <Content Include="Scripts\daterangepicker.js" />
+    <Content Include="Scripts\DYMO.Label.Framework.2.0.2.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.daterangepicker.min.js" />
+    <Content Include="Scripts\jquery.jtable.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -383,6 +483,7 @@
     <Content Include="Scripts\pdfmake.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\select2.full.js" />
     <Content Include="Scripts\vfs_fonts.js" />
     <Content Include="Scripts\virtual-fs.js" />
     <Content Include="Scripts\_references.js" />
@@ -422,10 +523,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\production_log\Create.cshtml" />
-    <Content Include="Views\production_log\Delete.cshtml" />
-    <Content Include="Views\production_log\Details.cshtml" />
-    <Content Include="Views\production_log\Edit.cshtml" />
     <Content Include="Views\production_log\Index.cshtml" />
     <Content Include="Views\pallets\Create.cshtml" />
     <Content Include="Views\pallets\Delete.cshtml" />
@@ -445,6 +542,161 @@
     <Content Include="Views\monitor_log\Details.cshtml" />
     <Content Include="Views\monitor_log\Edit.cshtml" />
     <Content Include="Views\monitor_log\Index.cshtml" />
+    <Content Include="Views\Manage\users.cshtml" />
+    <Content Include="Views\Manage\coas.cshtml" />
+    <Content Include="Views\Manage\station.cshtml" />
+    <Content Include="Views\Manage\assetTag.cshtml" />
+    <Content Include="Views\Manage\dymo_label.cshtml" />
+    <Content Include="source.label" />
+    <Content Include="Web References\org.connectall\apiEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\associativeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogAssignedProduct.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogAttributeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogAttributeOptionEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogCategoryEntityNoChildren.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogCategoryInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogCategoryTree.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogInventoryStockItemEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductAttributeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductAttributeMediaTypeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductAttributeSetEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductCustomOptionInfoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductCustomOptionListEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductCustomOptionTypesEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductCustomOptionValueInfoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductCustomOptionValueListEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductDownloadableLinkInfoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductImageEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductLinkAttributeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductLinkEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductReturnEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductSpecialPriceReturnEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductTagInfoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductTagListEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductTierPriceEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\catalogProductTypeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\customerAddressEntityItem.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\customerCustomerEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\customerGroupEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\directoryCountryEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\directoryRegionEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\existsFaltureEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\giftMessageResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\org.connectall\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\org.connectall\Magento.wsdl" />
+    <Content Include="Web References\org.connectall\magentoInfoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web References\org.connectall\salesOrderCreditmemoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\salesOrderEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\salesOrderInvoiceEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\salesOrderListEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\salesOrderShipmentEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\shoppingCartInfoEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\shoppingCartLicenseEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\shoppingCartPaymentMethodResponseEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\shoppingCartShippingMethodEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\shoppingCartTotalsEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\org.connectall\storeEntity.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -460,6 +712,25 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="https://connectall.org/index.php/api/v2_soap/%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\org.connectall\</RelPath>
+      <UpdateFromURL>https://connectall.org/index.php/api/v2_soap/%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Demo_org_connectall_MagentoService</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

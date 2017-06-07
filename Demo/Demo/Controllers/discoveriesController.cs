@@ -20,142 +20,17 @@ namespace Demo.Views
             return View(db.discovery.ToList());
         }
 
-        // GET: discoveries/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            discovery discovery = db.discovery.Find(id);
-            if (discovery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(discovery);
-        }
-
-        // GET: discoveries/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: discoveries/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ictag,time,serial,brand,model,cpu,hdd,ram,optical_drive,location")] discovery discovery)
-        {
-            if (ModelState.IsValid)
-            {
-                db.discovery.Add(discovery);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(discovery);
-        }
-
         
 
-        public JsonResult edit_form(string asset ,string time, string serial, string make,string cpu,string ram, string hdd,string model) {
-            List<string> message = new List<string>();
-            using (var db = new db_a094d4_demoEntities1()) {
+       
 
-                try
-                {
+      
 
-                    var discovery = new discovery();
-                    discovery.serial = serial;
-                    discovery.brand = make;
-                    discovery.cpu = cpu;
-                    discovery.ram = ram;
-                    discovery.hdd = hdd;
-                    discovery.model = model;
-                    discovery.ictag = int.Parse(asset);
-                    db.discovery.Attach(discovery);
-                    var entry = db.Entry(discovery);
-                    entry.Property(e => e.serial).IsModified = true;
-                    entry.Property(e => e.brand).IsModified = true;
-                    entry.Property(e => e.cpu).IsModified = true;
-                    entry.Property(e => e.ram).IsModified = true;
-                    entry.Property(e => e.hdd).IsModified = true;
-                    entry.Property(e => e.model).IsModified = true;
-                    
-                    // other changed properties
-                    db.SaveChanges();
+      
 
-                    
-                    message.Add("Info Has Updated for Asset ");
-                }
-                catch (Exception e) {
+      
 
-                    message.Add(e.InnerException.InnerException.Message);
-
-                }
-
-               
-
-
-
-            }
-
-
-
-            return Json(new { message = message},JsonRequestBehavior.AllowGet);
-        }
-
-        // GET: discoveries/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            discovery discovery = db.discovery.Find(id);
-            if (discovery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(discovery);
-        }
-
-        // POST: discoveries/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ictag,time,serial,brand,model,cpu,hdd,ram,optical_drive,location")] discovery discovery)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(discovery).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(discovery);
-        }
-
-        // GET: discoveries/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            discovery discovery = db.discovery.Find(id);
-            if (discovery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(discovery);
-        }
-
-        // POST: discoveries/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        
         
        
         protected override void Dispose(bool disposing)
@@ -167,70 +42,153 @@ namespace Demo.Views
             base.Dispose(disposing);
         }
 
-        public JsonResult search_record(string search_string,string search_cat,string is_raw)
-        {
-            var result = new List<discovery>();
-            switch (search_cat) {
-                case "brand":
-                    result = (from t in db.discovery where t.brand.Contains(search_string) select t).ToList();
-                    break;
-                case "model":
-                    result = (from t in db.discovery where t.model.Contains(search_string) select t).ToList();
-                    break;
-                case "hdd":
-                    result = (from t in db.discovery where t.hdd.Contains(search_string) select t).ToList();
-                    break;
-                case "ram":
-                    result = (from t in db.discovery where t.ram.Contains(search_string) select t).ToList();
-                    break;
-                case "cpu":
-                   result = (from t in db.discovery where t.cpu.Contains(search_string) select t).ToList();
-                    break;
-                default:
-                    break;
-            }
-            
-            if(is_raw == "true")
-            {
-                var result_ictag = (from t in result select t.ictag);
-                var rediscovery_inv = (from d in db.rediscovery select d.ictag).ToList();
-                var raw = result_ictag.Except(rediscovery_inv).ToList();
-                result = (from d in db.discovery where raw.Contains(d.ictag) select d).ToList();
-            }
 
-            return Json(result,JsonRequestBehavior.AllowGet);
+       
+
+        public JsonResult lv2detail_model_dropdown(string input,string brand)
+        {
+
+            var ram_result = (from t in db.discovery where t.brand == brand && t.model == input select t.ram).Distinct().ToList();
+            var hdd_result = (from t in db.discovery where t.brand == brand && t.model == input select t.hdd).Distinct().ToList();
+
+
+            ram_result.Sort();
+            hdd_result.Sort();
+            return Json(new { ram = ram_result, hdd = hdd_result}, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult delete_record(string ictag)
+
+        public JsonResult detail_model_dropdown(string input)
         {
-            string message = "";
-            try
-            {
-                using (var remove = new db_a094d4_demoEntities1())
+
+            var model_result = (from t in db.discovery where t.brand == input select t.model).Distinct().ToList();
+            
+
+            model_result.Sort();
+            
+            return Json(model_result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult brand_dropdown()
+        {
+
+           
+            var manu_result = (from t in db.discovery select t.brand).Distinct().ToList();
+
+            manu_result.Sort();
+           
+            return Json(new { manu = manu_result},JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult get_discovery_data (int jtStartIndex, int jtPageSize, string jtSorting = null, string asset = "",string model = "", string ram = "",string hdd="",string manu = "",string  raw = "", bool search = false)
+        {
+
+
+            if (search == true)  {
+
+                IQueryable<discovery> result = null;
+               
+
+                if (!string.IsNullOrEmpty(asset))
                 {
-                    remove.Database.ExecuteSqlCommand(
-                    "Delete from discovery where ictag = '" + ictag + "'");
+                    int int_asset = int.Parse(asset);
+                    result = (from d in db.discovery where d.ictag == int_asset select d);
+                    return Json(new { Result = "OK", Records = result, TotalRecordCount = result.Count() }, JsonRequestBehavior.AllowGet);
+                }
+                if (manu != "Select a Manufacture")
+                {
+                    result = (from d in db.discovery where d.brand == manu select d);
+
+                }
+                if (model != "Select a Model" ) {
+                    result = (from d in result where d.model == model select d);
+                }
+                if (ram != "Select RAM" && ram != "")
+                {
+                    result = (from d in result where d.ram == ram select d);
+                }
+                if (hdd != "Select HDD" && hdd !="")
+                {
+                    result = (from d in result where d.hdd == hdd select d);
                 }
 
-
-                message = ictag + " Has Been Deleted";
+                return Json(new { Result = "OK", Records = result, TotalRecordCount = result.Count() }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+             
+
+           
+
+                try
+                {
+
+                    var count = (from d in db.discovery select d).Count();
+
+                    var result = db.discovery.SqlQuery(
+                    "Select * from discovery order by " + jtSorting + " Limit " + jtStartIndex + "," + jtPageSize);
+
+                    return Json(new { Result = "OK", Records = result, TotalRecordCount = count }, JsonRequestBehavior.AllowGet);
+
+                }
+
+                catch (Exception ex)
+                {
+
+                    return Json(new { Result = "ERROR", Message = ex.Message });
+                }
+
+            
+           
+            
+
+
+            //default entry
+           
+        }
+
+        public JsonResult update_discovery_data(discovery discovery) {
+
+
+            try
             {
-                message = e.Message;
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
+                }
+
+                
+                    db.Entry(discovery).State = EntityState.Modified;
+                    db.SaveChanges();
+                   
+                
+
+                return Json(new { Result = "OK" },JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult delete_discovery_data(discovery discovery) {
+            try
+            {
+
+
+                discovery = db.discovery.Find(discovery.ictag);
+                db.discovery.Remove(discovery);
+                db.SaveChanges();
+                return Json(new { Result = "OK" });
+            }
+            catch (Exception ex){
+                return Json(new { Result = "ERROR", Message = ex.Message });
+
             }
 
 
-            return Json(message,JsonRequestBehavior.AllowGet);
+
         }
 
-        public JsonResult get_discovery_data ()
-        {
-
-
-            var result = (from t in db.discovery orderby t.time descending select t).ToList();
-
-            return Json(result,JsonRequestBehavior.AllowGet);
-        }
     }
 }

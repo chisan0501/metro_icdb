@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery.jtable.js"></script>
+<link href="~/Content/metro/blue/jtable.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+<h1 class="leader">Change User Role</h1>
+<br />
+<hr />
+
+<div id="PersonTable"></div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $('#PersonTable').jtable({
+            title: 'Users List',
+            paging: true,
+            pageSize: 10, //Set page size (default: 10)
+            sorting: true,
+            defaultSorting: 'Email', //Sort by Name by default
+            actions: {
+                listAction: '/manage/get_user_data',
+                updateAction: '/manage/update_user_data',
+                deleteAction: '/manage/delete_user_data',
+              //  createAction: '/manage/create_user'
+            },
+            fields: {
+                Id: {
+                    title: 'Id',
+                    key: true,
+                    list: false
+                },
+               
+                Email: {
+                    title: 'Email',          
+                },
+                UserName: {
+                    title: 'User Name',
+                },
+               
+                Roles: {
+                    title: 'Current Role',
+                   
+                    options: [
+                        { Value: 'Admin', DisplayText: 'Admin' },
+                        { Value: 'Manager', DisplayText: 'Manager' },
+                        { Value: 'Employee', DisplayText: 'Employee' },
+                    ]
+                },
+            }
+        });
+
+        //Load person list from server
+        $('#PersonTable').jtable('load');
+    });
+
+
+</script>

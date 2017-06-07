@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "assetTag";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/Scripts/JsBarcode.all.min.js"></script>
+
+<h1 class="leader">Asset Tag</h1>
+<br />
+<hr />
+
+
+
+    
+    <div class="accordion" data-role="accordion">
+        
+        <div class="frame active">
+            <div class="heading">Asset Tag Count<span class="mif-tag icon"></span></div>
+            <div class="content">
+                <h4 class=".small">Current Asset Tag Count: </h4><h4 class=".small" id="counter"></h4>
+                <button id="reset_btn" class="button">Reset</button>
+            </div>
+        </div>
+        <div class="frame active">
+            <div class="heading">Print Asset Tag<span class="mif-tags icon"></span></div>
+            <div class="content">
+                <div class="input-control text"><input id="number_asset_tag" type="text" placeholder="# of Asset Tag"></div>
+                <button id="print_btn" class="button">Print</button>
+                <div class="accordion" data-role="accordion">
+                    <div id="elem"><ul id="ull"></ul></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+               
+
+
+
+<script>
+    update_counter();
+
+
+
+     function update_counter() {
+
+        $.getJSON("@Url.Action("get_counter_number")", function (data) {
+            var count = data;
+            $('#counter').text(count);
+            sessionStorage.setItem('count', count);
+    });
+
+    }
+    function reset_counter(data) {
+
+                $.getJSON("@Url.Action("reset_asset")", data, function (data) {
+
+            update_counter();
+        });
+    }
+
+    $('#reset_btn').click(function () {
+
+        $.Dialog({
+            title: "Message",
+            content: "<form><p>Enter the # of the Asset Tag you would like to reset to</p><div class='input-control text'><input id='asset' required type='text'></div><p><input class='submit_counter' type='submit' value='Submit'></p></form>",
+            actions: [
+           
+            ],
+            options: {
+                overlay: true,
+                overlayClickClose: true,
+                overlayColor: "#000000",
+                closeButton:true
+                
+            }
+        });
+
+    });
+
+    $(document).on('click', '.submit_counter', function (e) {
+        
+        e.preventDefault();
+        var asset = $('#asset').val();
+        var data = {
+
+            asset: asset,
+        };
+
+        $.Notify({
+            caption: '',
+            content: 'Asset Tag Will now begin with #'+asset,
+            type: 'success',
+            timeout:2000
+        });
+
+        reset_counter(data);
+        $('#asset').val("");
+      
+    })
+    $('#print_btn').click(function () {
+        var number_asset_tag = Number($('#number_asset_tag').val());
+
+        var current_count = Number($('#counter').text());
+
+        var start = current_count;
+
+        var end = start + number_asset_tag;
+        for (i = start; i < end; i++) {
+            $('#ull').append('<li><img id=barcode' + [i] + '></img></li>');
+            gen([i], [i]);
+
+        }
+
+        var data = {
+
+            asset: end,
+        };
+        reset_counter(data);
+
+
+        PrintElem(elem);
+
+
+
+    });
+
+    function PrintElem(elem) {
+        setTimeout(function () {
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=600');
+
+            mywindow.document.write('<html><head>');
+            mywindow.document.write('</head><style> @@page {size: 99px 57px;margin: 0;} ul{list-style-type: none;} .print:last-child {page-break-after: auto;}</style><body>');
+            mywindow.document.write($('#elem').html());
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            $('#ull').html("");
+            return true;
+
+
+
+        }, 1000);
+
+    }
+
+    function gen(barcode, id_num) {
+
+        JsBarcode("#barcode" + id_num, barcode, {
+            format: "CODE128",
+            fontSize: 15,
+            width: 1,
+            height: 30,
+            displayValue: true
+        });
+
+    }
+
+
+</script>

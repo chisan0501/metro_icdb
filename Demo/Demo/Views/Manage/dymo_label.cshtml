@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewBag.Title = "dymo_label";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DYMO.Label.Framework.2.0.2.js"></script>
+
+
+<h2 class="leader">Dymo Label Web Application</h2>
+
+<div>
+    <div class="tabcontrol2" data-role="tabcontrol" data-save-state="true" id="tabcontrol_4">
+        <ul class="tabs">
+            <li><a href="#frame_4_1">Refrub</a></li>
+            <li><a href="#frame_4_2">Quick Reprint</a></li>
+            <li><a href="#frame_4_3">RMA</a></li>
+        </ul>
+        <div class="frames">
+            <div class="frame" id="frame_4_1">
+                <div class="flex-grid ">
+                    <div class="row">
+                        <div class="cell colspan3">
+                            <form data-on-submit="return false" data-role="validator" >
+                                <div class="input-control text">
+                                    <input data-validate-func="minlength"
+            data-validate-arg="5" data-validate-hint="This field must contains min 5 symbols!" type="text" required placeholder="Enter Asset Tag" id="asset">
+                                    <span class="input-state-error mif-warning"></span>
+                                    <span class="input-state-success mif-checkmark"></span>
+                                </div>
+                                <div class="input-control text">
+                                    <input type="text" placeholder="Enter Pre-COA" value="00999-999-000-999">
+                                </div>
+                                <div class="input-control select">
+                                    <select id='channel' data-validate-func="required" >
+                                      
+                                    </select>
+                                </div>
+                                <div class="input-control select" >
+                                    <select id='sub' data-validate-func="required" >
+                                        <option selected value="">Select SKU</option>
+                                    </select>
+                                </div>
+                                <div class="input-control select">
+                                    <select id="grade_select">
+                                        <option  value="">Select Grade</option>
+                                        <option selected value="a">A</option>
+                                        <option value="b">B</option>
+                                        <option value="c">C</option>
+                                    </select>
+                                </div>
+                                <div class="input-control select">
+                                    <select id="printer_select">
+                                    </select>
+                                </div>
+                                <br />
+                                <button id="search" class="command-button">
+                                    <span class="icon mif-search"></span>
+                                    Search
+                                </button>
+                                <button type="button" disabled class="command-button">
+                                    <span class="icon mif-print"></span>
+                                    Print
+                                </button>
+                                <button type="button" class="command-button">
+                                    <span class="icon mif-bin"></span>
+                                    Clear
+                                </button>
+
+                            </form>
+                          
+                            </div>
+                        <div class="cell colspan4">
+                            <label>Make</label>
+                            <div class="input-control text full-size">
+                                <input id="brand" type="text">
+                            </div>
+                            <label>Model</label>
+                            <div class="input-control text full-size">
+                                <input id="model" type="text">
+                            </div>
+                            <label>CPU</label>
+                            <div class="input-control text full-size">
+                                <input id="cpu" type="text">
+                            </div>
+                            <label>RAM</label>
+                            <div class="input-control text full-size">
+                                <input id="ram" type="text">
+                            </div>
+                            <label>HDD</label>
+                            <div class="input-control text full-size">
+                                <input id="hdd" type="text">
+                            </div>
+                            <label>Serial</label>
+                            <div class="input-control text full-size">
+                                <input id="serial" type="text">
+                            </div>
+                            <label>Has SSD?</label>
+                            <div class="input-control text full-size">
+                                <input id="has_ssd" type="text">
+                            </div>
+                            <label>SKU</label>
+                            <div class="input-control text full-size">
+                                <input id="sku" type="text">
+                            </div>
+                         </div>
+                        <div class="cell colspan5">
+                            <div id="test"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            <div class="frame" id="frame_4_2">2</div>
+            <div class="frame" id="frame_4_3">3</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    $(".panel").panel();
+    var printers = dymo.label.framework.getPrinters();
+    set_menu();
+
+    $('#search').click(function (e) {
+        var asset_tag = $('#asset').val();
+        var channel = $('#channel option:selected').text();
+        var sub = $('#sub option:selected').text();
+        var grade = $('#grade_select option:selected').text();
+        var data = {
+            asset_tag: asset_tag,
+            channel: channel,
+            sub : sub,
+            grade : grade
+        }
+        $.getJSON("@Url.Action("get_dymo")", data, function (data) {
+            $('#brand').val(data.brand);
+            $('#model').val(data.model);
+            $('#cpu').val(data.cpu);
+            $('#ram').val(data.ram);
+            $('#hdd').val(data.hdd);
+            $('#serial').val(data.serial);
+            $('#has_ssd').val(data.has_SSD);
+            $('#sku').val(data.pallet);
+        });
+
+    });
+
+
+    load_label();
+
+    $('#channel').change(function () {
+        var sub =  $('#channel option:selected').text();
+        var data = { sub : sub }
+
+        $.getJSON("@Url.Action("get_sub_channel")", data,function (data) {
+
+            $('#sub').html('');
+            $('#sub').html("<option selected value=''>Select SKU</option>");
+            for (var i = 0; i < data.length; i++) {
+                $('#sub').append("<option value='" + data[i] + "'>" + data[i] + "</option>")
+
+            }
+
+        });
+
+    });
+
+    function set_menu() {
+
+
+        $('#printer_select').html("");
+        for (var i = 0; i < printers.length; i++) {
+
+            var printer = printers[i];
+            $('#printer_select').append("<option value='" + printer.name + "'>" + printer.name + "</option>");
+        }
+        $.getJSON("@Url.Action("get_channel")",function (data) {
+
+            $('#channel').html('');
+            $('#channel').html("<option selected value=''>Select Channel</option>");
+            for (var i = 0; i < data.length; i++) {
+                $('#channel').append("<option value='"+data[i]+"'>"+data[i]+"</option>")
+
+            }
+        });
+    };
+
+    function load_label() {
+        var labelUri = "http://dev.icdb.name/source.label";
+        var label = dymo.label.framework.openLabelFile(labelUri);
+        var printerName = $('#printer_select option:selected').text();
+
+
+        var image = document.createElement('img');
+        var labelXml = dymo.label.framework.openLabelFile(labelUri).getLabelXml();
+        var pngData = dymo.label.framework.renderLabel(labelXml, "", printerName);
+        image.src = "data:image/png;base64," + pngData;
+        document.getElementById('test').appendChild(image);
+
+    };
+
+
+
+</script>

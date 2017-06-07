@@ -4,76 +4,90 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="leader">Search Result for @ViewData["asset"]</h1>
+<h1 class="leader">Search Result @@ @ViewData["type"] for @ViewData["asset"]</h1>
 <br />
 <hr />
-<div class="grid">
-    <div class="row cells4">
-      
-        <div class="cell">
-            <div class="popover marker-on-bottom bg-green">
-                <div class="fg-white">We Also Found 3 Other Records Assoicated with this Serial #</div>
+<div class="flex-grid">
+    <div class="row">
+        <div class="cell colspan4">
+            <div class="accordion" data-role="accordion">
+
+                <div class="frame active">
+                    <div class="heading">Assets w/ same Serial #<span class="mif-tag icon"></span></div>
+                    <div id="serial_message" class="content">
+
+                    </div>
+                </div>
+
+            </div>
             </div>
         </div>
-        <div class="cell">
-            <div class="popover marker-on-bottom bg-green">
-                <div class="fg-white">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
+        
+    <br />
+   
+        
+        <div class="row">
+            <div class="cell colspan4">
+                <div id="discovery_panel" class="panel" data-role="draggable" data-drag-element=".heading">
+                    <div class="heading">
+                        <span class="icon mif-home"></span>
+                        <span class="title">Discovery</span>
+                    </div>
+                    <div class="content">
+                        <table class="table striped hovered cell-hovered border bordered">
+                            <thead>
+
+
+                            </thead>
+
+                            <tbody id="discovery_data"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+            <div class="cell colspan4">
+                <div id="rediscovery_panel" class="panel" data-role="draggable" data-drag-element=".heading">
+                    <div class="heading">
+                        <span class="icon mif-home"></span>
+                        <span class="title">Rediscovery</span>
+                    </div>
+                    <div class="content">
+                        <table class="table striped hovered cell-hovered border bordered">
+                            <thead>
+
+                            </thead>
+
+                            <tbody id="rediscovery_data"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="cell colspan4">
+                <div id="imaging_panel" class="panel" data-role="draggable" data-drag-element=".heading">
+                    <div class="heading">
+                        <span class="icon mif-home"></span>
+                        <span class="title">Imaging</span>
+                    </div>
+                    <div class="content">
+                        <table class="table striped hovered cell-hovered border bordered">
+                            <thead>
+
+                            </thead>
+
+                            <tbody id="imaging_data"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-<div id="discovery_panel" class="panel" data-role="draggable" data-drag-element=".heading">
-    <div class="heading">
-        <span class="icon mif-home"></span>
-        <span class="title">Discovery</span>
-    </div>
-    <div class="content">
-        <table class="table striped hovered cell-hovered border bordered">
-            <thead>
-         
 
-            </thead>
 
-            <tbody id="discovery_data">
 
-             
-            </tbody>
-        </table>
-    </div>
-</div>
 
-<div id="rediscovery_panel" class="panel" data-role="draggable" data-drag-element=".heading">
-    <div class="heading">
-        <span class="icon mif-home"></span>
-        <span class="title">Rediscovery</span>
-    </div>
-    <div class="content">
-        <table class="table striped hovered cell-hovered border bordered">
-            <thead>
-           
-            </thead>
 
-            <tbody id="rediscovery_data">
 
-            </tbody>
-        </table>
-    </div>
-</div>
-<div id="imaging_panel" class="panel" data-role="draggable" data-drag-element=".heading">
-    <div class="heading">
-        <span class="icon mif-home"></span>
-        <span class="title">Imaging</span>
-    </div>
-    <div class="content">
-        <table class="table striped hovered cell-hovered border bordered">
-            <thead>
-
-            </thead>
-
-            <tbody id="imaging_data"></tbody>
-        </table>
-    </div>
-</div>
 
 
 
@@ -83,59 +97,62 @@
 
 <script>
 
-   
+
     var data = {
 
-        asset_tag: @ViewData["asset"],
+        asset_tag: '@ViewData["asset"]',
+        type : '@ViewData["type"]'
     }
 
-          $.getJSON("@Url.Action("search_result_json")",data ,function (data) {
+    $.getJSON("@Url.Action("search_result_json")", data, function (data) {
 
 
-             
-              
-              
+         for (var i = 0; i < data.serial.length; i++) {
 
-             
-              if (data.discovery != null) {
-                  var a = moment(data.discovery.time);
-       
-                  data.discovery.time = moment(data.discovery.time).format("YYYY-MM-DD HH:mm");
-                    
-                  $('#discovery_data').html("<tr><td>Time</td><td>" + data.discovery.time + "</td></tr><tr><td>Asset Tag</td><td>" + data.discovery.ictag + "</td></tr><tr><td>Serial</td><td>" + data.discovery.serial + "</td></tr><tr><td>Manufacture</td><td>" + data.discovery.brand + "</td></tr><tr><td>Model</td><td>" + data.discovery.model + "</td></tr><tr><td>CPU</td><td>" + data.discovery.cpu + "</td></tr><tr><td>RAM</td><td>" + data.discovery.ram + "</td></tr><tr><td>HardDrive</td><td>" + data.discovery.hdd + "</td></tr><tr><td>Optical Drive</td><td>" + data.discovery.optical_drive + "</td></tr>")
-                
-              }
-              if (data.rediscovery != null) {
+             $('#serial_message').append("\r\n<a href='/home/search_result?asset_tag=" + data.serial[i] + "'>" + data.serial[i]+"</a>");
 
-                  var b = moment(data.rediscovery.time);
-                
-                  var result = "";
-                
-                  var diff = b.diff(a, 'days');
-                data.rediscovery.time = moment(data.rediscovery.time).format("YYYY-MM-DD HH:mm");
+        }
+              //start processing json
+              //some asset will not contain all 3 stage of info
+              // in that case data will not be process for that specific stage
+              for (var i = 0; i < data.discovery.length; i++) {
+                  if (data.discovery != null) {
+                      var a = moment(data.discovery.time);
 
-                
-
-                $('#rediscovery_data').html("<tr><td>Time</td><td>" + data.rediscovery.time + " (" + diff + " day(s) idle)</td></tr><tr><td>Asset Tag</td><td>" + data.rediscovery.ictag + "</td></tr><tr><td>Serial</td><td>" + data.rediscovery.serial + "</td></tr><tr><td>Manufacture</td><td>" + data.rediscovery.brand + "</td></tr><tr><td>Model</td><td>" + data.rediscovery.model + "</td></tr><tr><td>CPU</td><td>" + data.rediscovery.cpu + "</td></tr><tr><td>RAM</td><td>" + data.rediscovery.ram + result + " </td></tr><tr><td>HardDrive</td><td>" + data.rediscovery.hdd + "</td></tr><tr><td>Optical Drive</td><td>" + data.rediscovery.optical_drive + "</td></tr><tr><td>SKU</td><td>" + data.rediscovery.pallet + "</td></tr><tr><td>Pre-COA</td><td>" + data.rediscovery.pre_coa + "</td></tr><tr><td>Refurbisher</td><td>" + data.rediscovery.refurbisher + "</td></tr><tr><td>Has SSD</td><td>" + data.rediscovery.has_SSD + "</td></tr>");
-              }
-              if (data.imaging != null) {
-                  var c = moment(data.imaging.time);
-                  var diff = c.diff(b, 'days');
-                  data.imaging.time = moment(data.imaging.time).format("YYYY-MM-DD HH:mm");
-
-                  if (data.imaging.channel !== data.rediscovery.pallet) {
-                      var row = "<tr><td>SKU</td><td style='color:red'>" + data.imaging.channel + " (SKU Does Not Match Refurbish Data)</td></tr>"
+                      data.discovery[i].time = moment(data.discovery[i].time).format("YYYY-MM-DD HH:mm");
+                      $('#discovery_data').html("<tr><td>Time</td><td>" + data.discovery[i].time + "</td></tr><tr><td>Asset Tag</td><td>" + data.discovery[i].ictag + "</td></tr><tr><td>Serial</td><td>" + data.discovery[i].serial + "</td></tr><tr><td>Manufacture</td><td>" + data.discovery[i].brand + "</td></tr><tr><td>Model</td><td>" + data.discovery[i].model + "</td></tr><tr><td>CPU</td><td>" + data.discovery[i].cpu + "</td></tr><tr><td>RAM</td><td>" + data.discovery[i].ram + "</td></tr><tr><td>HardDrive</td><td>" + data.discovery[i].hdd + "</td></tr><tr><td>Optical Drive</td><td>" + data.discovery[i].optical_drive + "</td></tr>")
                   }
-                  else {
+                  if (data.rediscovery != null) {
 
-                      var row = "<tr><td>SKU</td><td>" + data.imaging.channel + "</td></tr>"
+                      var b = moment(data.rediscovery[i].time);
+
+                      var result = "";
+
+                      var diff = b.diff(a, 'days');
+                      data.rediscovery[i].time = moment(data.rediscovery[i].time).format("YYYY-MM-DD HH:mm");
+
+
+
+                      $('#rediscovery_data').html("<tr><td>Time</td><td>" + data.rediscovery[i].time + " (" + diff + " day(s) idle)</td></tr><tr><td>Asset Tag</td><td>" + data.rediscovery[i].ictag + "</td></tr><tr><td>Serial</td><td>" + data.rediscovery[i].serial + "</td></tr><tr><td>Manufacture</td><td>" + data.rediscovery[i].brand + "</td></tr><tr><td>Model</td><td>" + data.rediscovery[i].model + "</td></tr><tr><td>CPU</td><td>" + data.rediscovery[i].cpu + "</td></tr><tr><td>RAM</td><td>" + data.rediscovery[i].ram + result + " </td></tr><tr><td>HardDrive</td><td>" + data.rediscovery[i].hdd + "</td></tr><tr><td>Optical Drive</td><td>" + data.rediscovery[i].optical_drive + "</td></tr><tr><td>SKU</td><td>" + data.rediscovery[i].pallet + "</td></tr><tr><td>Pre-COA</td><td>" + data.rediscovery[i].pre_coa + "</td></tr><tr><td>Refurbisher</td><td>" + data.rediscovery[i].refurbisher + "</td></tr><tr><td>Has SSD</td><td>" + data.rediscovery[i].has_SSD + "</td></tr>");
+                  }
+                  if (data.imaging != null) {
+                      var c = moment(data.imaging[i].time);
+                      var diff = c.diff(b, 'days');
+                      data.imaging[i].time = moment(data.imaging[i].time).format("YYYY-MM-DD HH:mm");
+
+                      if (data.imaging[i].channel !== data.rediscovery[i].pallet) {
+                          var row = "<tr><td>SKU</td><td style='color:red'>" + data.imaging[i].channel + " (SKU Does Not Match Refurbish Data)</td></tr>"
+                      }
+                      else {
+
+                          var row = "<tr><td>SKU</td><td>" + data.imaging[i].channel + "</td></tr>"
+
+                      }
+
+                      $('#imaging_data').html("<tr><td>Time</td><td>" + data.imaging[i].time + " (" + diff + " day(s) idle)</td></tr><tr><td>Asset Tag</td><td>" + data.imaging[i].ictags + "</td></tr><tr><td>Serial</td><td>" + data.imaging[i].serial + "</td></tr><tr><td>Manufacture</td><td>" + data.imaging[i].Manufacture + "</td></tr><tr><td>Model</td><td>" + data.imaging[i].Model + "</td></tr><tr><td>CPU</td><td>" + data.imaging[i].CPU + "</td></tr><tr><td>RAM</td><td>" + data.imaging[i].RAM + "</td></tr><tr><td>HardDrive</td><td>" + data.imaging[i].HDD + "</td></tr><tr><td>Optical Drive</td><td>" + data.imaging[i].optical_drive + "</td></tr><tr><td>WCOA</td><td>" + data.imaging[i].wcoa + "</td></tr><tr><td>OCOA</td><td>" + data.imaging[i].ocoa + "</td></tr><tr><td>Video Card</td><td>" + data.imaging[i].video_card + "</td></tr>" + row);
 
                   }
-
-                  $('#imaging_data').html("<tr><td>Time</td><td>" + data.imaging.time + " (" + diff + " day(s) idle)</td></tr><tr><td>Asset Tag</td><td>" + data.imaging.ictags + "</td></tr><tr><td>Serial</td><td>" + data.imaging.serial + "</td></tr><tr><td>Manufacture</td><td>" + data.imaging.Manufacture + "</td></tr><tr><td>Model</td><td>" + data.imaging.Model + "</td></tr><tr><td>CPU</td><td>" + data.imaging.CPU + "</td></tr><tr><td>RAM</td><td>" + data.imaging.RAM + "</td></tr><tr><td>HardDrive</td><td>" + data.imaging.HDD + "</td></tr><tr><td>Optical Drive</td><td>" + data.imaging.optical_drive + "</td></tr><tr><td>WCOA</td><td>" + data.imaging.wcoa + "</td></tr><tr><td>OCOA</td><td>" + data.imaging.ocoa + "</td></tr><tr><td>Video Card</td><td>" + data.imaging.video_card + "</td></tr>" + row);
-            
               }
-             
     });
 
 

@@ -20,205 +20,160 @@ namespace Demo.Controllers
             return View(db.rediscovery.ToList());
         }
 
-        public JsonResult get_rediscovery_data()
+
+        public JsonResult lv2detail_model_dropdown(string input, string brand)
         {
 
+            var ram_result = (from t in db.rediscovery where t.brand == brand && t.model == input select t.ram).Distinct().ToList();
+            var hdd_result = (from t in db.rediscovery where t.brand == brand && t.model == input select t.hdd).Distinct().ToList();
 
-            var result = (from t in db.rediscovery orderby t.time descending select t).ToList();
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            ram_result.Sort();
+            hdd_result.Sort();
+            return Json(new { ram = ram_result, hdd = hdd_result }, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: rediscoveries/Details/5
-        public ActionResult Details(int? id)
+
+        public JsonResult detail_model_dropdown(string input)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            rediscovery rediscovery = db.rediscovery.Find(id);
-            if (rediscovery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(rediscovery);
+
+            var model_result = (from t in db.rediscovery where t.brand == input select t.model).Distinct().ToList();
+
+
+            model_result.Sort();
+
+            return Json(model_result, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: rediscoveries/Create
-        public ActionResult Create()
+
+        public JsonResult brand_dropdown()
         {
-            return View();
+
+
+            var manu_result = (from t in db.rediscovery select t.brand).Distinct().ToList();
+
+            manu_result.Sort();
+
+            return Json(new { manu = manu_result }, JsonRequestBehavior.AllowGet);
         }
 
-        // POST: rediscoveries/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ictag,time,serial,brand,model,cpu,hdd,ram,optical_drive,location,pallet,pre_coa,refurbisher,status,orderNum,has_SSD")] rediscovery rediscovery)
+
+        public JsonResult get_rediscovery_data(int jtStartIndex, int jtPageSize, string jtSorting = null, string asset = "", string model = "", string pallet = "", string refurbisher = "",string ram = "", string hdd = "", string manu = "", string raw = "", bool search = false)
         {
-            if (ModelState.IsValid)
-            {
-                db.rediscovery.Add(rediscovery);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            return View(rediscovery);
-        }
 
-        // GET: rediscoveries/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            rediscovery rediscovery = db.rediscovery.Find(id);
-            if (rediscovery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(rediscovery);
-        }
-
-        public JsonResult edit_form(int asset, string serial, string model, string refurbisher, string sku)
-        {
-            List<string> message = new List<string>();
-            using (var db = new db_a094d4_demoEntities1())
+            if (search == true)
             {
 
-                try
+                IQueryable<rediscovery> result = null;
+
+
+                if (!string.IsNullOrEmpty(asset))
                 {
-
-                    var redis = new rediscovery();
-                    redis.ictag = asset;
-                    redis.pallet = sku;
-                    redis.serial = serial;
-                    redis.model = model;
-                    redis.refurbisher = refurbisher;
-                    db.rediscovery.Attach(redis);
-                    var entry = db.Entry(redis);
-                    entry.Property(e => e.pallet).IsModified = true;
-                    entry.Property(e => e.model).IsModified = true;
-                    entry.Property(e => e.serial).IsModified = true;
-                    entry.Property(e => e.refurbisher).IsModified = true;
-
-                    // other changed properties
-                    db.SaveChanges();
-
-
-                    message.Add("Info Has Updated for Asset ");
+                    int int_asset = int.Parse(asset);
+                    result = (from d in db.rediscovery where d.ictag == int_asset select d);
+                    return Json(new { Result = "OK", Records = result, TotalRecordCount = result.Count() }, JsonRequestBehavior.AllowGet);
                 }
-                catch (Exception e)
+                if (manu != "Select a Manufacture")
                 {
-
-                    message.Add(e.InnerException.InnerException.Message);
+                    result = (from d in db.rediscovery where d.brand == manu select d);
 
                 }
+                if (model != "Select a Model")
+                {
+                    result = (from d in result where d.model == model select d);
+                }
+                if (ram != "Select RAM" && ram != "")
+                {
+                    result = (from d in result where d.ram == ram select d);
+                }
+                if (hdd != "Select HDD" && hdd != "")
+                {
+                    result = (from d in result where d.hdd == hdd select d);
+                }
 
-
-
-
-
+                return Json(new { Result = "OK", Records = result, TotalRecordCount = result.Count() }, JsonRequestBehavior.AllowGet);
             }
 
 
 
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
-        }
 
-
-        // POST: rediscoveries/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ictag,time,serial,brand,model,cpu,hdd,ram,optical_drive,location,pallet,pre_coa,refurbisher,status,orderNum,has_SSD")] rediscovery rediscovery)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(rediscovery).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(rediscovery);
-        }
-
-
-        public JsonResult search_record(string search_string, string search_cat)
-        {
-            var result = new List<rediscovery>();
-            switch (search_cat)
-            {
-             
-                case "model":
-                    result = (from t in db.rediscovery where t.model.Contains(search_string) select t).ToList();
-                    break;
-                case "sku":
-                    result = (from t in db.rediscovery where t.pallet.Contains(search_string) select t).ToList();
-                    break;
-                case "refurbisher":
-                    result = (from t in db.rediscovery where t.refurbisher.Contains(search_string) select t).ToList();
-                    break;
-                default:
-                    break;
-            }
-
-            
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-
-        // GET: rediscoveries/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            rediscovery rediscovery = db.rediscovery.Find(id);
-            if (rediscovery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(rediscovery);
-        }
-
-        // POST: rediscoveries/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            rediscovery rediscovery = db.rediscovery.Find(id);
-            db.rediscovery.Remove(rediscovery);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        public JsonResult delete_record(string ictag)
-        {
-            string message = "";
             try
             {
-                using (var remove = new db_a094d4_demoEntities1())
+
+                var count = (from d in db.rediscovery select d).Count();
+
+                var result = db.rediscovery.SqlQuery(
+                "Select * from rediscovery order by " + jtSorting + " Limit " + jtStartIndex + "," + jtPageSize);
+
+                return Json(new { Result = "OK", Records = result, TotalRecordCount = count }, JsonRequestBehavior.AllowGet);
+
+            }
+
+            catch (Exception ex)
+            {
+
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+
+
+
+
+
+
+            //default entry
+
+        }
+
+        public JsonResult update_rediscovery_data(rediscovery rediscovery)
+        {
+
+
+            try
+            {
+                if (!ModelState.IsValid)
                 {
-                    remove.Database.ExecuteSqlCommand(
-                    "Delete from rediscovery where ictag = '" + ictag + "'");
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
                 }
 
 
-                message = ictag + " Has Been Deleted";
+                db.Entry(rediscovery).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+
+                return Json(new { Result = "OK" }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                message = e.Message;
+                return Json(new { Result = "ERROR", Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult delete_rediscovery_data(rediscovery rediscovery)
+        {
+            try
+            {
+
+
+                rediscovery = db.rediscovery.Find(rediscovery.ictag);
+                db.rediscovery.Remove(rediscovery);
+                db.SaveChanges();
+                return Json(new { Result = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+
             }
 
 
-            return Json(message, JsonRequestBehavior.AllowGet);
+
         }
+
+
+
 
         protected override void Dispose(bool disposing)
         {

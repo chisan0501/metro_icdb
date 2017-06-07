@@ -20,204 +20,7 @@ namespace Demo.Controllers
             return View();
         }
 
-        // GET: production_log/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            production_log production_log = db.production_log.Find(id);
-            if (production_log == null)
-            {
-                return HttpNotFound();
-            }
-            return View(production_log);
-        }
-
-        // GET: production_log/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: production_log/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "time,ictags,wcoa,ocoa,Manufacture,Model,CPU,RAM,HDD,serial,channel,pre_coa,location,video_card,screen_size")] production_log production_log)
-        {
-            if (ModelState.IsValid)
-            {
-                db.production_log.Add(production_log);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(production_log);
-        }
-
-
-
-        // GET: production_log/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            production_log production_log = db.production_log.Find(id);
-            if (production_log == null)
-            {
-                return HttpNotFound();
-            }
-            return View(production_log);
-        }
-
-        public JsonResult edit_form(string asset, string wcoa, string ocoa)
-        {
-            List<string> message = new List<string>();
-            using (var db = new db_a094d4_demoEntities1())
-            {
-
-                try
-                {
-
-                    var production = new production_log();
-                    production.wcoa = wcoa;
-                    production.ocoa = ocoa;
-                    production.ictags = asset;
-                    db.production_log.Attach(production);
-                    var entry = db.Entry(production);
-                    entry.Property(e => e.ictags).IsModified = true;
-                    
-                    entry.Property(e => e.ocoa).IsModified = true;
-
-
-                    // other changed properties
-                    db.SaveChanges();
-
-                    
-                    message.Add("Info Has Updated for Asset ");
-                }
-                catch (Exception e)
-                {
-
-                    message.Add(e.InnerException.InnerException.Message);
-
-                }
-
-
-
-
-
-            }
-
-
-
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
-        }
-
-        // POST: production_log/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "time,ictags,wcoa,ocoa,Manufacture,Model,CPU,RAM,HDD,serial,channel,pre_coa,location,video_card,screen_size")] production_log production_log)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(production_log).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(production_log);
-        }
-
-        public JsonResult get_production_log_data()
-        {
-
-            
-
-            var result = (from t in db.production_log orderby t.time descending select t).Take(100).ToList();
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult search_record(string search_string, string search_cat)
-        {
-            var result = new List<production_log>();
-            switch (search_cat)
-            {
-
-                case "ictags":
-                    result = (from t in db.production_log where t.ictags.Contains(search_string) select t).ToList();
-                    break;
-                case "wcoa":
-                    result = (from t in db.production_log where t.wcoa.Contains(search_string) select t).ToList();
-                    break;
-                case "ocoa":
-                    result = (from t in db.production_log where t.ocoa.Contains(search_string) select t).ToList();
-                    break;
-                default:
-                    break;
-            }
-
-
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-
-        // GET: production_log/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            production_log production_log = db.production_log.Find(id);
-            if (production_log == null)
-            {
-                return HttpNotFound();
-            }
-            return View(production_log);
-        }
-
-        public JsonResult delete_record(string ictag)
-        {
-            string message = "";
-            try
-            {
-                using (var remove = new db_a094d4_demoEntities1())
-                {
-                    remove.Database.ExecuteSqlCommand(
-                    "Delete from production_log where ictags = '" + ictag + "'");
-                }
-
-
-                message = ictag + " Has Been Deleted";
-            }
-            catch (Exception e)
-            {
-                message = e.Message;
-            }
-
-
-            return Json(message, JsonRequestBehavior.AllowGet);
-        }
-
-        // POST: production_log/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            production_log production_log = db.production_log.Find(id);
-            db.production_log.Remove(production_log);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        
 
         protected override void Dispose(bool disposing)
         {
@@ -226,6 +29,157 @@ namespace Demo.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        public JsonResult lv2detail_Model_dropdown(string input, string brand)
+        {
+
+            var RAM_result = (from t in db.production_log where t.Manufacture == brand && t.Model == input select t.RAM).Distinct().ToList();
+            var HDD_result = (from t in db.production_log where t.Manufacture == brand && t.Model == input select t.HDD).Distinct().ToList();
+
+
+            RAM_result.Sort();
+            HDD_result.Sort();
+            return Json(new { ram = RAM_result, hdd = HDD_result }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult detail_Model_dropdown(string input)
+        {
+
+            var Model_result = (from t in db.production_log where t.Manufacture == input select t.Model).Distinct().ToList();
+
+
+            Model_result.Sort();
+
+            return Json(Model_result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult Manufacture_dropdown()
+        {
+
+
+            var manu_result = (from t in db.production_log select t.Manufacture).Distinct().ToList();
+
+            manu_result.Sort();
+
+            return Json(new { manu = manu_result }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult get_production_log_data(int jtStartIndex, int jtPageSize, string jtSorting = null, string asset = "", string Model = "", string RAM = "", string HDD = "", string manu = "", string raw = "", bool search = false)
+        {
+
+
+            if (search == true)
+            {
+
+                IQueryable<production_log> result = null;
+
+
+                if (!string.IsNullOrEmpty(asset))
+                {
+                   
+                    result = (from d in db.production_log where d.ictags == asset select d);
+                    return Json(new { Result = "OK", Records = result, TotalRecordCount = result.Count() }, JsonRequestBehavior.AllowGet);
+                }
+                if (manu != "Select a Manufacture")
+                {
+                    result = (from d in db.production_log where d.Manufacture == manu select d);
+
+                }
+                if (Model != "Select a Model")
+                {
+                    result = (from d in result where d.Model == Model select d);
+                }
+                if (RAM != "Select RAM" && RAM != "")
+                {
+                    result = (from d in result where d.RAM == RAM select d);
+                }
+                if (HDD != "Select HDD" && HDD != "")
+                {
+                    result = (from d in result where d.HDD == HDD select d);
+                }
+
+                return Json(new { Result = "OK", Records = result, TotalRecordCount = result.Count() }, JsonRequestBehavior.AllowGet);
+            }
+
+
+
+
+            try
+            {
+
+                var count = (from d in db.production_log select d).Count();
+
+                var result = db.production_log.SqlQuery(
+                "Select * from production_log order by " + jtSorting + " Limit " + jtStartIndex + "," + jtPageSize);
+
+                return Json(new { Result = "OK", Records = result, TotalRecordCount = count }, JsonRequestBehavior.AllowGet);
+
+            }
+
+            catch (Exception ex)
+            {
+
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+
+
+
+
+
+
+            //default entry
+
+        }
+
+        public JsonResult update_production_log_data(production_log production_log)
+        {
+
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
+                }
+
+
+                db.Entry(production_log).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+
+                return Json(new { Result = "OK" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult delete_production_log_data(production_log production_log)
+        {
+            try
+            {
+
+
+                production_log = db.production_log.Find(production_log.ictags);
+                db.production_log.Remove(production_log);
+                db.SaveChanges();
+                return Json(new { Result = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+
+            }
+
+
+
         }
     }
 }

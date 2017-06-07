@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "station";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/Scripts/jquery.jtable.js"></script>
+<link href="~/Content/metro/blue/jtable.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+
+<h1 class="leader">Manage Stations</h1>
+<br />
+<hr />
+
+<div id="PersonTable"></div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $('#PersonTable').jtable({
+            title: 'Stations List',
+            paging: true,
+            pageSize: 10, //Set page size (default: 10)
+            sorting: true,
+            defaultSorting: 'Station Name', //Sort by Name by default
+            actions: {
+                listAction: '/manage/get_station_data',
+                updateAction: '/manage/update_station_data',
+                deleteAction: '/manage/delete_station_data',
+                  createAction: '/manage/create_station_data'
+            },
+            fields: {
+                station_dropdown_value: {
+                    title: 'Drop Down Value',
+                    key: true,
+                    list: false
+                },
+
+                station_name: {
+                    title: 'Station Name',
+                },
+                description: {
+                    title: 'Description',
+                }
+            }
+        });
+
+        //Load person list from server
+        $('#PersonTable').jtable('load');
+    });
+
+
+</script>

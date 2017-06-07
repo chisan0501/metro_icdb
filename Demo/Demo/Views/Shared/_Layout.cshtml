@@ -11,10 +11,7 @@
     <script src="~/Scripts/daterangepicker.js"></script>
     <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
-    @*<link href="~/Content/materialize.css" rel="stylesheet" />
-    <script src="~/Scripts/materialize.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">*@
-
+    <script src="~/Scripts/select2.full.js"></script>
     <link href="~/Content/metro-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
@@ -23,6 +20,7 @@
     <script src="~/Scripts/JsBarcode.all.min.js"></script>
     <script src="~/Scripts/papaparse.min.js"></script>
     <link href="~/Content/dataTables.material.min.css" rel="stylesheet" />
+
 </head>
 <style type="text/css">
    #left_content{
@@ -59,30 +57,64 @@ height: 64px !important; /* or height of nav */
 
             <li><a href="@Url.Action("index", "pallets")">Pallets</a></li>
             <li><a href="@Url.Action("home", "report")" class="">Report</a></li>
-            <li><a href="@Url.Action("index", "manage")" class="">Settings</a></li>
+            <li><a class="dropdown-toggle">Settings</a>
+            <ul class="d-menu" data-role="dropdown">
+    <li>
+        <a class="dropdown-toggle">Users</a>
+        <ul class="d-menu" data-role="dropdown">
+            <li><a href="@Url.Action("users", "manage")" >Change User Role</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="" class="dropdown-toggle">COAs</a>
+        <ul class="d-menu" data-role="dropdown">
+            <li><a href="@Url.Action("coas", "manage")">Add/Remove COAs</a></li>
+            <li><a href="@Url.Action("index", "production_log")">COAs History</a></li>
+            <li><a href="@Url.Action("station", "manage")">Manage Stations</a></li>
+        </ul>
+
+    </li>
+    <li><a href="" class="dropdown-toggle">Labels</a>
+        <ul class="d-menu" data-role="dropdown">
+            <li><a href="@Url.Action("assetTag", "manage")">Asset Tag</a></li>
+            <li><a href="@Url.Action("dymo_label", "manage")">Dymo Label</a></li>
+        </ul>
+                
+                </li>
+    <li><a href="@Url.Action("index", "monitor_log")" class="">About</a></li>
+
+</ul></li>
 
 
 
         </ul>
-        <div class="app-bar-pullbutton automatic"></div>
-        <ul class="app-bar-menu place-right" data-flexdirection="reverse">
-            <li>
-                <div class="input-control text">
+        <div class="app-bar-element place-right">
+            <a class="dropdown-toggle fg-white"><span class="mif-search"></span>Search</a>
+            <div class="app-bar-drop-container bg-white fg-dark place-right"
+                 data-role="dropdown" data-no-close="true">
+                <div class="padding20">
                     <form id="search_form">
-                        <input id="top_search_bar" type="text" placeholder="Search...">
-                        </form>
-</div>
-            </li>
-            <li>
-                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
-                }
-
-            </li>
-
-        </ul>
+                       
+                        <div class="input-control text">
+                            <span class="mif-search prepend-icon"></span>
+                            <input id="top_search_bar" type="text" placeholder="Search...">
+                        </div>
+                        <div class="input-control select">
+                            <select id="search_type">
+                                <option selected value="asset">Asset Tag</option>
+                                <option value="serial">Serial Number</option>
+                                <option value="coa">COA</option>
+                            </select>
+                        </div>
+                       
+                       
+                        
+                    </form>
+                </div>
+            </div>
+          
+        </div>
+       
     </div>
        
    
@@ -102,8 +134,8 @@ height: 64px !important; /* or height of nav */
     
 </body>
 <script>
-   
-   
+
+
 
     $("#search_form").submit(function (event) {
 
@@ -112,9 +144,13 @@ height: 64px !important; /* or height of nav */
         event.preventDefault();
 
         var asset_tag = $('#top_search_bar').val();
+        var type = $("#search_type").val();
+      
         
-        var link = "@Url.Action("search_result","home",new { asset_tag = "123" })";
-        link = link.replace("123", asset_tag);
+
+        var link = '@Html.Raw(@Url.Action("search_result", "home"))' + '?asset_tag=' + asset_tag + '&&search_type=' + type;
+
+       
 
 
         window.location.href = link;

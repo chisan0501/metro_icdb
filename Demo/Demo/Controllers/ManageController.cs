@@ -9,6 +9,7 @@ using Microsoft.Owin.Security;
 using Demo.Models;
 using System.Collections.Generic;
 using System.Transactions;
+using System.Data.Entity;
 
 namespace Demo.Controllers
 {
@@ -348,49 +349,202 @@ namespace Demo.Controllers
             
         }
 
-        public JsonResult delete_station(string station_name) {
+        public ActionResult station() {
 
-            var message = new List<string>();
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult create_station_data(station_setting station)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
+                }
+
+                station_setting addstation = db.station_setting.Add(station);
+                return Json(new { Result = "OK", Record = addstation });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        public ActionResult assetTag()
+        {
+
+            return View();
+
+        }
+
+        public ActionResult dymo_label() {
+
+            return View();
+        }
+        public JsonResult update_station_data(station_setting station) {
 
             try
             {
-                using (var remove = new db_a094d4_demoEntities1())
+                if (!ModelState.IsValid)
                 {
-                    remove.Database.ExecuteSqlCommand(
-                    "Delete from station_setting where station_dropdown_value = '" + station_name + "'");
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
                 }
 
+                
+                db.Entry(station).State = EntityState.Modified;
+                db.SaveChanges();
 
-                message.Add(station_name + " Has Been Deleted");
+
+
+                return Json(new { Result = "OK" }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                message.Add(e.InnerException.InnerException.Message);
+                return Json(new { Result = "ERROR", Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
 
-
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+            
         }
 
-        public JsonResult add_station(string station_name) {
 
-            var message = new List<string>();
+        public string process_sku(string input) {
+            string result = "";
 
-            message.Add(add_station_db("ocoa_", station_name));
-           message.Add(add_station_db("wcoa_", station_name));
+            
 
-
-
-            return Json(new { message = message },JsonRequestBehavior.AllowGet);
+            return result;
         }
 
-        public JsonResult get_coas_station() {
+        public JsonResult get_coas_station()
+        {
 
             var result = (from t in db.station_setting select t.station_dropdown_value).ToList();
 
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult get_sub_channel(string sub) {
+
+            var result = (from t in db.label_menu where t.name == sub select t.product).ToList();
+
             return Json(result,JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult get_channel() {
+
+            var result = (from t in db.label_menu select t.name).ToList().Distinct();
+
+
+            return Json(result,JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult get_dymo (string asset_tag, string sub, string channel,string grade) {
+
+
+            SQLModel.RefrubHistoryObj RefrubHistoryObj = new SQLModel.RefrubHistoryObj();
+            int Intasset_tag = int.Parse(asset_tag);
+            var hardware_result = (from t in db.rediscovery where t.ictag == Intasset_tag select t).FirstOrDefault();
+
+            switch (channel)
+            {
+                case "Tableau (Laptop)":
+                case "Tableau (Desktop)":
+                case "NGO":
+                case "OEM (Desktop)":
+                case "OEM (Laptop)":
+                case "Mar (Desktop)":
+                case "Mar (Laptop)":
+                    //format the sku before passing on
+                    string temp_cpu;
+                    //create the temp variable to hold the sku construct info 
+                    var brand_name = magento_sku.brand_name();
+                    foreach (var brand in brand_name)
+                    {
+                        if (hardware_result.brand.Equals(brand.Key, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            RefrubHistoryObj.brand = brand.Key;
+                        }
+                        else
+                        {
+                            RefrubHistoryObj.brand = "Generic";
+                        }
+                    }
+
+
+                    //  var temp_brand = magento_sku.compute_difference(RefrubHistoryObj.made, magento_sku.brand_name());
+
+                    if (channel == "NGO")
+                    {
+                        temp_cpu = magento_sku.ngo_title(RefrubHistoryObj);
+                    }
+                    else
+                    {
+                        temp_cpu = magento_sku.comput_title(RefrubHistoryObj);
+                    }
+
+                    RefrubHistoryObj.ram = magento_sku.ram_format(RefrubHistoryObj, false);
+                    RefrubHistoryObj.hdd = magento_sku.hdd_format(false, RefrubHistoryObj);
+                    RefrubHistoryObj.grade = grade;
+
+                    var magento_listing = listing.listing_info(RefrubHistoryObj);
+                    RefrubHistoryObj = magento_sku.format_sku(RefrubHistoryObj);
+
+                    RefrubHistoryObj.sku = RefrubHistoryObj.brand + "_" + RefrubHistoryObj.model + "_" + temp_cpu + "_" + RefrubHistoryObj.ram + "_" + RefrubHistoryObj.hdd + RefrubHistoryObj.type + RefrubHistoryObj.grade;
+
+
+                    break;
+                case "Online Order":
+                    await _dialogCoordinator.ShowInputAsync(this, "Online Order", "Please Enter Order #").ContinueWith(t => sku = (t.Result));
+                    RefrubHistoryObj.sku = sku;
+                    break;
+                case "My Channel is not Listed":
+                    await _dialogCoordinator.ShowInputAsync(this, "Custom Channel", "Please Enter Channel Name").ContinueWith(t => sku = (t.Result));
+                    RefrubHistoryObj.sku = sku;
+
+                    break;
+                default:
+                    RefrubHistoryObj.sku = sub + grade;
+
+                    break;
+
+            }
+
+
+
+
+            RefrubHistoryObj.asset_tag = Intasset_tag;
+            RefrubHistoryObj.cpu = hardware_result.cpu;
+            RefrubHistoryObj.hdd = hardware_result.hdd;
+            RefrubHistoryObj.ram = hardware_result.ram;
+            RefrubHistoryObj.serial = hardware_result.serial;
+            
+            return Json(RefrubHistoryObj, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult delete_station_data(station_setting station)
+        {
+            try
+            {
+                db.station_setting.Remove(station);
+                return Json(new { Result = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        public JsonResult get_station_data(int jtStartIndex, int jtPageSize, string jtSorting = null) {
+            var count = (from d in db.station_setting select d).Count();
+            var result = (from t in db.station_setting select t).ToList();
+            return Json(new { Result = "OK", Records = result, TotalRecordCount = count }, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         public JsonResult import_coa(List<COAs_model.Class1> input) {
@@ -538,6 +692,88 @@ namespace Demo.Controllers
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+        }
+
+        public ActionResult users (){
+
+
+            return View();
+        }
+
+        public ActionResult coas() {
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult create_user(RegisterViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
+                }
+
+                model.UserName = model.Email;
+                var user = new ApplicationUser { UserName = model.Email };
+                user.Email = user.UserName;
+                var result = UserManager.CreateAsync(user, model.Password);
+                return Json(new { Result = "OK", Record = result });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        public JsonResult update_user_data(aspnetusers user,string Roles) {
+
+            Roles = (from t in db.aspnetroles where t.Name == Roles select t.Id).FirstOrDefault();
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
+                }
+
+                db.Database.ExecuteSqlCommand(
+        "UPDATE aspnetuserroles SET RoleID = '" + Roles + "' WHERE UserID = '"+user.Id+"'");
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+
+                return Json(new { Result = "OK" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+        public JsonResult get_user_data(int jtStartIndex, int jtPageSize, string jtSorting = null)
+        {
+            var count = (from d in db.aspnetusers select d).Count();
+
+            var result   = from u in db.aspnetusers
+                        from ur in u.aspnetroles
+                        join r in db.aspnetroles on ur.Id equals r.Id
+                        select new
+                        {
+                            Id = u.Id,
+                            Email = u.Email,
+                            UserName = u.UserName,
+                            Roles = r.Name,
+                        };
+
+
+
+
+            return Json(new { Result = "OK", Records = result, TotalRecordCount = count }, JsonRequestBehavior.AllowGet);
+
         }
 
         protected override void Dispose(bool disposing)

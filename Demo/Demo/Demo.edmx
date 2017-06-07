@@ -137,7 +137,8 @@
           </Key>
           <Property Name="name" Type="char" MaxLength="50" />
           <Property Name="product" Type="char" MaxLength="50" Nullable="false" />
-          <Property Name="rowID" Type="int" />
+          <Property Name="special_sku" Type="char" MaxLength="50" />
+          <Property Name="disable_grade" Type="char" MaxLength="50" />
         </EntityType>
         <EntityType Name="mac_log">
           <Key>
@@ -150,6 +151,25 @@
           <Property Name="refurbisher" Type="char" MaxLength="100" />
           <Property Name="os_version" Type="char" MaxLength="100" />
           <Property Name="Model" Type="char" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="magento_html">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="char" MaxLength="50" />
+          <Property Name="name" Type="char" MaxLength="50" />
+          <Property Name="drop_down_value" Type="char" MaxLength="50" />
+          <Property Name="html" Type="text" />
+        </EntityType>
+        <EntityType Name="magento_sku_brand">
+          <Key>
+            <PropertyRef Name="index" />
+          </Key>
+          <Property Name="name" Type="char" MaxLength="50" />
+          <Property Name="dropdown_value" Type="char" MaxLength="50" />
+          <Property Name="sku_name" Type="char" MaxLength="50" />
+          <Property Name="index" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
@@ -346,6 +366,8 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <EntitySet Name="label_log" EntityType="Self.label_log" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="label_menu" EntityType="Self.label_menu" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="mac_log" EntityType="Self.mac_log" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="magento_html" EntityType="Self.magento_html" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="magento_sku_brand" EntityType="Self.magento_sku_brand" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="monitor_log" EntityType="Self.monitor_log" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="monitor_setting" EntityType="Self.monitor_setting" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="pallet" EntityType="Self.pallet" Schema="db_a094d4_demo" store:Type="Tables" />
@@ -508,7 +530,8 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           </Key>
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="product" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="rowID" Type="Int32" />
+          <Property Name="special_sku" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="disable_grade" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="mac_log">
           <Key>
@@ -701,6 +724,8 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
             <End Role="aspnetroles" EntitySet="aspnetroles" />
           </AssociationSet>
           <EntitySet Name="scripts" EntityType="db_a094d4_demoModel.scripts" />
+          <EntitySet Name="magento_html" EntityType="db_a094d4_demoModel.magento_html" />
+          <EntitySet Name="magento_sku_brand" EntityType="db_a094d4_demoModel.magento_sku_brand" />
         </EntityContainer>
         <EntityType Name="scripts">
           <Key>
@@ -709,6 +734,25 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="content" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="magento_html">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="drop_down_value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="html" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="magento_sku_brand">
+          <Key>
+            <PropertyRef Name="index" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dropdown_value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sku_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="index" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -844,9 +888,10 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <EntitySetMapping Name="label_menu">
             <EntityTypeMapping TypeName="db_a094d4_demoModel.label_menu">
               <MappingFragment StoreEntitySet="label_menu">
+                <ScalarProperty Name="disable_grade" ColumnName="disable_grade" />
+                <ScalarProperty Name="special_sku" ColumnName="special_sku" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="product" ColumnName="product" />
-                <ScalarProperty Name="rowID" ColumnName="rowID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -999,6 +1044,27 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="content" ColumnName="content" />
                 <ScalarProperty Name="row_id" ColumnName="row_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="magento_html">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.magento_html">
+              <MappingFragment StoreEntitySet="magento_html">
+                <ScalarProperty Name="html" ColumnName="html" />
+                <ScalarProperty Name="drop_down_value" ColumnName="drop_down_value" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="magento_sku_brand">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.magento_sku_brand">
+              <MappingFragment StoreEntitySet="magento_sku_brand">
+                <ScalarProperty Name="index" ColumnName="index" />
+                <ScalarProperty Name="sku_name" ColumnName="sku_name" />
+                <ScalarProperty Name="dropdown_value" ColumnName="dropdown_value" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -4,236 +4,186 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="tap-target" data-activates="menu">
-    <div class="tap-target-content">
-        <h5>Imaging Data</h5>
-        <p>This Page display the latest 100 records of imaging data,global search is also avaiable below the title. To do a in table search use the Search input above "Action" column</p>
-    </div>
-</div>
+<script src="~/Scripts/jquery.jtable.js"></script>
+<link href="~/Content/metro/blue/jtable.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
 
-<div id="edit_modal" class="modal">
-    <div class="modal-content">
-        <h4 id="edit_title"></h4>
-
-        <div class="input-field ">
-            <input placeholder="Asset" id="asset_value" type="text" class="validate">
-            <label for="asset_value">Asset Tag</label>
-        </div>
-        <div class="input-field ">
-            <input placeholder="Windows COA" id="wcoa" type="text">
-            <label for="time">Windows COA</label>
-        </div>
-        <div class="input-field ">
-            <input placeholder="Office COA" id="ocoa" type="text">
-            <label for="serial">Office COA</label>
-        </div>
-        
-
-
-
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-        <a id="edit_confirm_btn" href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Edit</a>
-    </div>
-</div>
-
-<div id="confrim_modal" class="modal">
-    <div class="modal-content">
-        <h4>Message</h4>
-        <p id="delete_message"></p>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-        <a id="delete_confirm_btn" href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Okay</a>
-    </div>
-</div>
-
-<div id="modal1" class="modal">
-    <div class="modal-content">
-        <h4 id="modal_title"></h4>
-        <a id="edit_asset" href="#edit_modal" class="waves-effect waves-light btn">Edit</a>
-        <a id="delete_asset" class="waves-effect waves-light btn">Delete</a>
-
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Exit</a>
-
-
-    </div>
-</div>
-<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <a id="menu" class="btn btn-floating btn-large cyan"><i class="material-icons">touch_app</i></a>
-</div>
-<div class="row">
-    <div class="col s12">
-        <h3 class="header">Imaging</h3>
-       
-    </div>
-    <div class="col s12">
-        <div class="input-field col s3">
-            <select id="search_cat">
-
-                <option value="ictags" selected>Asset Tag</option>
-                <option value="wcoa">Windows COA</option>
-                <option value="ocoa">Office COA</option>
-
-            </select>
-            <label>Search Category</label>
-        </div>
-        <div class="input-field col s3">
-            <input id="search_string" type="text" class="validate">
-            <label for="search_string">Content</label>
-        </div>
-        <div class="input-field col s3">
-            <a id="global_search" class="waves-effect waves-light btn">Search</a>
-        </div>
-
-    </div>
-    <div class="col s12">
-        <table class="table hover" id="table4">
-            <thead>
-                <tr>
-                    <th>Asset Tag</th>
-                    <th>Wcoa</th>
-                    <th>Ocoa</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-
-        </table>
-    </div>
-
-</div>
 
 
 
 
 <script>
-    $('select').material_select();
 
-    $('#menu').click(function () {
-        $('.tap-target').tapTarget('open');
+
+    $.getJSON("Manufacture_dropdown", function (json) {
+        $("#manu_dropdown").select2({
+            data: json.manu,
+            minimumResultsForSearch: Infinity
+        });
+    });
+
+
+
+    function get_detail() {
+
+        $('#model_dropdown').html('<option value="3620194" selected="selected">Select a Model</option>');
+
+        var data = {
+            input: $("#manu_dropdown option:selected").text()
+        }
+
+        $.getJSON("detail_model_dropdown", data, function (json) {
+            $("#model_dropdown").select2({
+                data: json,
+                minimumResultsForSearch: Infinity
+            });
+        });
+    }
+    function get_detail_lv2() {
+
+        $('#ram_dropdown').html('<option value="3620194" selected="selected">Select RAM');
+        $('#hdd_dropdown').html('<option value="3620194" selected="selected">Select HDD');
+        var data = {
+            brand: $("#manu_dropdown option:selected").text(),
+            input: $("#model_dropdown option:selected").text()
+        }
+
+        $.getJSON("lv2detail_model_dropdown", data, function (json) {
+            $("#ram_dropdown").select2({
+                data: json.ram,
+                minimumResultsForSearch: Infinity
+            });
+            $("#hdd_dropdown").select2({
+                data: json.hdd,
+                minimumResultsForSearch: Infinity
+            });
+        });
+    }
+</script>
+
+
+<div class="filtering">
+    <form id="search_form">
+        <div class="input-control text">
+            <input id="ic" type="text" placeholder="Input you Asset Tag">
+        </div>
+
+        <select id="manu_dropdown" style="display: none;" onchange="get_detail()">
+            <option value="3620194" selected="selected">Select a Manufacture</option>
+        </select>
+        <select id="model_dropdown" style="display: none;" onchange="get_detail_lv2()"></select>
+        <select id="ram_dropdown" style="display: none;"></select>
+        <select id="hdd_dropdown" style="display: none;"></select>
+        <input type="submit" value="Load Records" id="load_btn">
+        <input type="submit" value="Clear" id="clear_btn">
+
+    </form>
+</div>
+
+<div id="PersonTable"></div>
+
+
+
+
+
+
+<script>
+
+    $('#clear_btn').click(function (e) {
+        e.preventDefault();
+        $('#ic').val("");
 
     });
-    
 
-
-    function get_table(table_name,data) {
-
-         $.getJSON("/production_log/"+table_name,data,function (data) {
-            for (var i = 0; i < data.length; i++) {
-                data[i].time = moment(data[i].time).format("YYYY-MM-DD HH:mm");
-
-            }
-
-            $('#table4').DataTable({
-                "lengthChange": false,
-                destroy: true,
-                data: data,
-                columnDefs: [{
-                    //construct the button on a custom column
-                    targets: 3,
-                    data: null,
-                    defaultContent: "<a class='btn-floating btn-small waves-effect waves-light green' href='#modal1'><i class='material-icons'>menu</i></a>"
-                }],
-                columns: [
-                    { data: "ictags" },
-                    { data: "wcoa" },
-                    { data: "ocoa" },
-
-
-
-                ]
-            });
-
-
+    $('#load_btn').click(function (e) {
+        e.preventDefault();
+        $('#PersonTable').jtable('load', {
+            search: true,
+            model: $("#model_dropdown option:selected").text(),
+            ram: $("#ram_dropdown option:selected").text(),
+            hdd: $("#hdd_dropdown option:selected").text(),
+            asset: $('#ic').val(),
+            manu: $("#manu_dropdown option:selected").text(),
+            raw: $('#raw').is(":checked"),
         });
-
-    };
+    });
 
 
     $(document).ready(function () {
-        $('.modal').modal();
-        var data = {};
-        get_table("get_production_log_data",data);
 
-          $('#edit_confirm_btn').click(function () {
-            var data = {
-               asset: $('#asset_value').val(),wcoa: $('#wcoa').val(), ocoa: $('#ocoa').val()
-            };
-            $.getJSON("@Url.Action("edit_form")", data, function (data) {
-                Materialize.toast(data.message, 3000);
-            });
 
+        $('#PersonTable').jtable({
+            title: 'Imaging Data',
+            paging: true,
+            pageSize: 10, //Set page size (default: 10)
+            sorting: true,
+            defaultSorting: 'time', //Sort by Name by default
+            actions: {
+                listAction: '/production_log/get_production_log_data',
+                updateAction: '/production_log/update_production_log_data',
+                deleteAction: '/production_log/delete_production_log_data',
+            },
+            fields: {
+                ictags: {
+                    title: 'Asset Tag',
+                    key: true,
+                    list: true
+                },
+                time: {
+                    title: 'Time',
+                    type: 'date',
+                    width: '15%',
+                    displayFormat: 'yy-mm-dd'
+                },
+                serial: {
+                    title: 'serial',
+                    list: false
+                },
+                Manufacture: {
+                    title: 'Brand'
+
+
+                },
+                Model: {
+                    title: 'Model',
+                    width: '12%'
+
+                },
+                CPU: {
+                    title: 'CPU',
+                    width: '15%'
+
+                },
+                HDD: {
+                    title: 'HDD',
+                    width: '10%',
+
+                },
+                RAM: {
+                    title: 'RAM',
+                    width: '10%',
+                },
+                wcoa: {
+                    title: 'Wcoa'
+
+                },
+                ocoa: {
+                    title: 'Ocoa',
+                    
+                },
+              
+                channel: {
+                    title: 'SKU'
+                },
+            }
         });
 
-        $("#table4").on("click", "a", function () {
-            //get the asset tag from child #1 of the row
-            var asset = $(this).closest('td').siblings(':nth-child(1)').text();
-            var wcoa= $(this).closest('td').siblings(':nth-child(2)').text();
-            var ocoa = $(this).closest('td').siblings(':nth-child(3)').text();
-
-            //set session storage with key name asset
-            sessionStorage.setItem('asset', asset);
-            sessionStorage.setItem('wcoa', wcoa);
-            sessionStorage.setItem('ocoa', ocoa);
-
-
-            //call the function that set all the content for the asset
-            set_modal_content(asset);
-        });
-
-
+        //Load person list from server
+        $('#PersonTable').jtable('load');
     });
 
 
-    $('#global_search').click(function () {
-        var search_string = $('#search_string').val();
-        var search_cat = $('#search_cat').val();
-         var data = {
-             search_string: search_string,
-             search_cat: search_cat,
-        }
 
-         get_table("search_record",data);
-
-    });
-
-    $('#delete_asset').click(function () {
-        $('#confrim_modal').modal('open');
-    });
-
-    $('#edit_asset').click(function () {
-
-    });
-
-    $('#delete_confirm_btn').click(function () {
-        var data = {
-
-            ictag : sessionStorage.getItem('asset')
-        }
-
-        $.getJSON("@Url.Action("delete_record")", data, function (data) {
-            Materialize.toast(data, 3000);
-            $('#modal1').modal('close');
-            get_table();
-        });
-
-    });
-
-
-    function set_modal_content(asset_tag) {
-        //function that set all the content with the asset selected
-        var asset = sessionStorage.getItem('asset');
-        $('#modal_title').text("Manage " + asset_tag);
-        $('#delete_message').text("Are you sure you want to delete the record for " + asset_tag + " ?");
-        //edit content
-        $('#edit_title').text("Edit " + asset);
-        $('#asset_value').val(sessionStorage.getItem('asset'));
-        $('#wcoa').val(sessionStorage.getItem('wcoa'));
-        $('#ocoa').val(sessionStorage.getItem('ocoa'));
-    }
 </script>
 
