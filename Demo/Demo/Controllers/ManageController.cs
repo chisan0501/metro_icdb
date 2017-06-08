@@ -448,7 +448,14 @@ namespace Demo.Controllers
             SQLModel.RefrubHistoryObj RefrubHistoryObj = new SQLModel.RefrubHistoryObj();
             int Intasset_tag = int.Parse(asset_tag);
             var hardware_result = (from t in db.rediscovery where t.ictag == Intasset_tag select t).FirstOrDefault();
-
+            RefrubHistoryObj.asset_tag = Intasset_tag;
+            RefrubHistoryObj.cpu = hardware_result.cpu;
+            RefrubHistoryObj.hdd = hardware_result.hdd;
+            RefrubHistoryObj.ram = hardware_result.ram;
+            RefrubHistoryObj.serial = hardware_result.serial;
+            RefrubHistoryObj.model = hardware_result.model;
+            RefrubHistoryObj.is_ssd = hardware_result.has_SSD;
+            RefrubHistoryObj.brand = hardware_result.brand;
             switch (channel)
             {
                 case "Tableau (Laptop)":
@@ -490,7 +497,7 @@ namespace Demo.Controllers
                     RefrubHistoryObj.hdd = magento_sku.hdd_format(false, RefrubHistoryObj);
                     RefrubHistoryObj.grade = grade;
 
-                    var magento_listing = listing.listing_info(RefrubHistoryObj);
+                //    var magento_listing = listing.listing_info(RefrubHistoryObj);
                     RefrubHistoryObj = magento_sku.format_sku(RefrubHistoryObj);
 
                     RefrubHistoryObj.sku = RefrubHistoryObj.brand + "_" + RefrubHistoryObj.model + "_" + temp_cpu + "_" + RefrubHistoryObj.ram + "_" + RefrubHistoryObj.hdd + RefrubHistoryObj.type + RefrubHistoryObj.grade;
@@ -498,16 +505,16 @@ namespace Demo.Controllers
 
                     break;
                 case "Online Order":
-                    await _dialogCoordinator.ShowInputAsync(this, "Online Order", "Please Enter Order #").ContinueWith(t => sku = (t.Result));
-                    RefrubHistoryObj.sku = sku;
+                    //await _dialogCoordinator.ShowInputAsync(this, "Online Order", "Please Enter Order #").ContinueWith(t => sku = (t.Result));
+                    //RefrubHistoryObj.sku = sku;
                     break;
                 case "My Channel is not Listed":
-                    await _dialogCoordinator.ShowInputAsync(this, "Custom Channel", "Please Enter Channel Name").ContinueWith(t => sku = (t.Result));
-                    RefrubHistoryObj.sku = sku;
+                    //await _dialogCoordinator.ShowInputAsync(this, "Custom Channel", "Please Enter Channel Name").ContinueWith(t => sku = (t.Result));
+                    //RefrubHistoryObj.sku = sku;
 
                     break;
                 default:
-                    RefrubHistoryObj.sku = sub + grade;
+                    RefrubHistoryObj.sku = sub;
 
                     break;
 
@@ -516,11 +523,7 @@ namespace Demo.Controllers
 
 
 
-            RefrubHistoryObj.asset_tag = Intasset_tag;
-            RefrubHistoryObj.cpu = hardware_result.cpu;
-            RefrubHistoryObj.hdd = hardware_result.hdd;
-            RefrubHistoryObj.ram = hardware_result.ram;
-            RefrubHistoryObj.serial = hardware_result.serial;
+            
             
             return Json(RefrubHistoryObj, JsonRequestBehavior.AllowGet);
         }

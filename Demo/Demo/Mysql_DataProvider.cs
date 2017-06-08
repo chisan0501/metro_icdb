@@ -31,7 +31,7 @@ namespace Demo
         {
             var result = new LabelModel.magento_hdd();
 
-            String cmdText = "select * from magento_html where type = 'hdd' and name ='" + size + "'";
+          //  String cmdText = "select * from magento_html where type = 'hdd' and name ='" + size + "'";
             var q = (from t in db.magento_html where t.type == "hdd" && t.name == size select t).FirstOrDefault();
 
                     result.html = q.html;
@@ -44,9 +44,9 @@ namespace Demo
         {
             var result = new LabelModel.magento_ram();
 
-            String cmdText = "select * from magento_html where type = 'ram' and name ='" + size + "'";
+          //  String cmdText = "select * from magento_html where type = 'ram' and name ='" + size + "'";
 
-            var query = (from q in db.magento_html where q.type == "ram" && q.name == "size" select q).FirstOrDefault();
+            var query = (from q in db.magento_html where q.type == "ram" && q.name == size select q).FirstOrDefault();
             result.html = query.html;
                     result.drop_down_value = query.drop_down_value;
 

@@ -44,9 +44,9 @@
                                 <div class="input-control select">
                                     <select id="grade_select">
                                         <option  value="">Select Grade</option>
-                                        <option selected value="a">A</option>
-                                        <option value="b">B</option>
-                                        <option value="c">C</option>
+                                        <option selected value="_A">A</option>
+                                        <option value="_B">B</option>
+                                        <option value="_C">C</option>
                                     </select>
                                 </div>
                                 <div class="input-control select">
@@ -105,7 +105,7 @@
                             </div>
                          </div>
                         <div class="cell colspan5">
-                            <div id="test"></div>
+                            <div id="label_img"></div>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
         var asset_tag = $('#asset').val();
         var channel = $('#channel option:selected').text();
         var sub = $('#sub option:selected').text();
-        var grade = $('#grade_select option:selected').text();
+        var grade = $('#grade_select option:selected').val();
         var data = {
             asset_tag: asset_tag,
             channel: channel,
@@ -145,8 +145,8 @@
             $('#ram').val(data.ram);
             $('#hdd').val(data.hdd);
             $('#serial').val(data.serial);
-            $('#has_ssd').val(data.has_SSD);
-            $('#sku').val(data.pallet);
+            $('#has_ssd').val(data.is_ssd);
+            $('#sku').val(data.sku);
         });
 
     });
@@ -163,7 +163,23 @@
             $('#sub').html('');
             $('#sub').html("<option selected value=''>Select SKU</option>");
             for (var i = 0; i < data.length; i++) {
-                $('#sub').append("<option value='" + data[i] + "'>" + data[i] + "</option>")
+                switch (sub){
+                    case "Mar (Desktop)":
+                    case "Mar (Laptop)":
+                    case "OEM (Desktop)":
+                    case "OEM (Laptop)":
+                    case "Tableau (Desktop)":
+                    case "Tableau (Laptop)":
+                    case "NGO":
+                        {
+                            $('#sub').append("<option selected value='" + data[i] + "'>" + data[i] + "</option>");
+                            break;
+                        }
+                    default:
+                        $('#sub').append("<option value='" + data[i] + "'>" + data[i] + "</option>");
+                
+                }
+                
 
             }
 
@@ -201,7 +217,7 @@
         var labelXml = dymo.label.framework.openLabelFile(labelUri).getLabelXml();
         var pngData = dymo.label.framework.renderLabel(labelXml, "", printerName);
         image.src = "data:image/png;base64," + pngData;
-        document.getElementById('test').appendChild(image);
+        document.getElementById('label_img').appendChild(image);
 
     };
 

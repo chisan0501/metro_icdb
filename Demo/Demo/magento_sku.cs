@@ -1890,7 +1890,7 @@ namespace Demo
             }
 
             Mysql_DataProvider mysql_data = new Mysql_DataProvider();
-            var ram_result = mysql_data.get_ram(spec.ram);
+            var ram_result = mysql_data.get_ram(ram);
             spec.ram_desc = ram_result.html;
             spec.memory_dropdown = ram_result.drop_down_value;
 
