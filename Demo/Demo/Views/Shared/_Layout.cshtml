@@ -86,6 +86,13 @@ height: 64px !important; /* or height of nav */
 </ul></li>
 
 
+            <li>
+            
+
+                <form method="post" action="@Url.Action("LogOff", "Account")" id="signoutfrm" style="display:none;">
+                    @Html.AntiForgeryToken()
+                </form>
+            <a href="" onclick="$('#signoutfrm').submit(); return false;">Logout</a></li>
 
         </ul>
         <div class="app-bar-element place-right">

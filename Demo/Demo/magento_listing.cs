@@ -1,6 +1,12 @@
-﻿using Demo.org.connectall;
+﻿using Accord.MachineLearning.DecisionTrees;
+using Accord.MachineLearning.DecisionTrees.Learning;
+using Accord.Math;
+using Accord.Math.Optimization.Losses;
+using Accord.Statistics.Filters;
+using Demo.org.connectall;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,7 +17,7 @@ namespace Demo
 {
     public class magento_listing
     {
-        public void get_exisiting(RefrubHistoryObj spec)
+        public void get_exisiting(Models.RefrubHistoryObj spec)
         {
             MagentoService mservice = new MagentoService();
             String mlogin = mservice.login("admin", "Interconnection123!");
@@ -50,7 +56,79 @@ namespace Demo
             return result;
         }
 
-        public void create_listing(RefrubHistoryObj spec)
+
+        public string cal_price(Models.RefrubHistoryObj spec)
+        {
+            var result = "0";
+            
+            var price = mysql_data.training_dt();
+            var codebook = new Codification(price);
+            DataTable symbols = codebook.Apply(price);
+            int[][] inputs = symbols.ToArray<int>("CPU", "RAM", "HDD", "Grade", "Channel","SSD");
+            int[] outputs = symbols.ToArray<int>("Price");
+            DecisionVariable[] attributes =
+             {
+                new DecisionVariable("CPU",     2), // 3 possible values (Sunny, overcast, rain)
+                new DecisionVariable("RAM", 5), // 3 possible values (Hot, mild, cool)  
+                new DecisionVariable("HDD",    4), // 2 possible values (High, normal)    
+                new DecisionVariable("Grade",        2),
+                new DecisionVariable("Channel",        2),
+                new DecisionVariable("SSD",        2)
+                // 2 possible values (Weak, strong) 
+            };      
+            var id3learning = new ID3Learning(attributes);
+
+            // Learn the training instances!
+            DecisionTree tree = id3learning.Learn(inputs, outputs);
+
+            // Compute the training error when predicting training instances
+            double error = new ZeroOneLoss(outputs).Loss(tree.Decide(inputs));
+
+            // The tree can now be queried for new examples through 
+            // its decide method. For example, we can create a query
+            var channel_training = "MAR";
+            if(spec.channel.Contains("OEM")) {
+                channel_training = "OEM";
+            }
+
+            int[] query = codebook.Transform(new[,]
+                        {
+                { "CPU",     spec.cpu_title  },
+                { "RAM", spec.ram    },
+                { "HDD",    spec.hdd  },
+                { "Grade",      spec.grade},
+                { "Channel",       channel_training },
+                {"SSD", spec.is_ssd }
+
+            });
+
+           
+            int predicted = tree.Decide(query);  
+
+       
+            result = codebook.Revert("Price", predicted); 
+            return result;
+        }
+
+        public string set_price(Models.RefrubHistoryObj spec) {
+
+            string result = "0";
+
+            switch (spec.type) {
+
+                case "_DK":
+                   // result = cal_price(spec);
+                    break;
+                case "_LP":
+                   // result = cal_price(spec);
+                    break;
+
+            }
+
+            return result;
+        }
+
+        public void create_listing(Models.RefrubHistoryObj spec)
         {
             MagentoService mservice = new MagentoService();
             String mlogin = mservice.login("admin", "Interconnection123!");
@@ -64,7 +142,7 @@ namespace Demo
             string[] website_id = { "1" };
             create.description = spec.desc;
             create.short_description = spec.short_desc;
-            create.price = "0";
+            create.price = set_price(spec);
             create.status = "2"; //set to disable
 
             create.visibility = "4"; //set to not Search, Catalog
@@ -77,7 +155,7 @@ namespace Demo
                 create.weight = "9.0";
             }
 
-
+            var grade = spec.grade.Replace("_", "");
             create.website_ids = website_id; //currently set to 1 (main website)
             create.tax_class_id = "2";
             // create.name = spec.brand + " " + spec.model + " (" + spec.cpu + "," + spec.ram + "GB RAM," + spec.hdd + " GB HDD)";
@@ -136,7 +214,7 @@ namespace Demo
             attributes[15].value = spec.wireless;
             attributes[16] = new associativeEntity();
             attributes[16].key = "grade";
-            attributes[16].value = spec.grade;
+            attributes[16].value = grade;
 
             catalogProductAdditionalAttributesEntity additionalAttributes = new catalogProductAdditionalAttributesEntity();
             additionalAttributes.single_data = attributes;
@@ -155,7 +233,7 @@ namespace Demo
 
 
         Mysql_DataProvider mysql_data = new Mysql_DataProvider();
-        public RefrubHistoryObj listing_info(RefrubHistoryObj spec)
+        public Models.RefrubHistoryObj listing_info(Models.RefrubHistoryObj spec)
         {
             //format magento listing machine accsessories description
             switch (spec.type)

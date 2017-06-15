@@ -49,5 +49,6 @@ namespace Demo
         public virtual DbSet<scripts> scripts { get; set; }
         public virtual DbSet<magento_html> magento_html { get; set; }
         public virtual DbSet<magento_sku_brand> magento_sku_brand { get; set; }
+        public virtual DbSet<training_data> training_data { get; set; }
     }
 }

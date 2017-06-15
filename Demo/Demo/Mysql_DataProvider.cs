@@ -1,8 +1,12 @@
 ﻿using Demo.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Data;
+using Accord;
+using System.Reflection;
 
 namespace Demo
 {
@@ -20,10 +24,10 @@ namespace Demo
             return result;
         }
 
-        public Dictionary<String, int> sku_brand()
+        public Dictionary<String, string> sku_brand()
         {
            
-            var result = (from t in db.magento_sku_brand select t).ToDictionary(x => x.name,x=> x.index);
+            var result = (from t in db.magento_sku_brand select t).ToDictionary(x => x.name,x=> x.sku_name);
 
           return result;
         }
@@ -68,6 +72,79 @@ namespace Demo
 
             return result;
         }
+      
 
+        public DataTable training_dt() {
+
+            var result = new DataTable("Train");
+            result.Columns.Add("Case", "CPU", "RAM", "HDD", "Grade", "Channel", "Type", "Price");
+
+
+            var data = (from t in db.training_data select t).ToList();
+            foreach (var item in data) {
+
+                result.Rows.Add(item.row_id, item.cpu, item.ram, item.hdd, item.grade, item.channel, item.type, item.price);
+            }
+            
+
+            return result;
+
+        }
+
+        public bool insert(RefrubHistoryObj input)
+        {
+            bool sucess = false;
+
+            var exisit = (from t in db.rediscovery where t.ictag == input.asset_tag select t);
+
+            var redis = new rediscovery();
+
+            redis.ictag = input.asset_tag;
+            redis.serial = input.serial;
+            redis.brand = input.brand;
+            redis.model = input.model;
+            redis.cpu = input.cpu;
+            redis.hdd = input.hdd;
+            redis.ram = input.ram;
+            redis.location = input.channel;
+            redis.pallet = input.sku;
+            redis.pre_coa = input.pre_coa;
+            redis.refurbisher = input.refurbisher;
+
+            if (exisit.Count() == 0) {
+
+                
+
+                using (db = new db_a094d4_demoEntities1())
+                {
+
+                    
+
+                    db.rediscovery.Add(redis);
+                    db.SaveChanges();
+
+                  //  String cmdText = "Insert into rediscovery(ictag,time,serial,brand,model,cpu,hdd,ram,optical_drive,location,pallet,pre_coa,refurbisher)VALUES ('" + input.asset_tag + "','" + "" + "','" + input.serial + "','" + input.brand + "','" + input.model + "','" + input.cpu + "','" + input.hdd + "','" + input.ram + "','','" + input.channel + "','" + input.sku + "','" + input.pre_coa + "','" + input.refurbisher + "') on Duplicate KEY update hdd='" + input.hdd + "',ram='" + input.ram + "',location='" + input.channel + "',pallet='" + input.sku + "',pre_coa = '" + input.pre_coa + "',refurbisher = '" + input.refurbisher + "'";
+                   
+
+                    sucess = true;
+                }
+               
+            }
+            else
+            {
+                db.Entry(redis).State = EntityState.Modified;
+                db.SaveChanges();
+
+            }
+
+
+
+
+
+
+
+
+            return sucess;
+        }
     }
 }

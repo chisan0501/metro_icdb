@@ -32,6 +32,7 @@
         <EntityTypeShape EntityType="db_a094d4_demoModel.scripts" Width="1.5" PointX="0.75" PointY="13.75" />
         <EntityTypeShape EntityType="db_a094d4_demoModel.magento_html" Width="1.5" PointX="13.375" PointY="9.75" />
         <EntityTypeShape EntityType="db_a094d4_demoModel.magento_sku_brand" Width="1.5" PointX="13.375" PointY="12.75" />
+        <EntityTypeShape EntityType="db_a094d4_demoModel.training_data" Width="1.5" PointX="14.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

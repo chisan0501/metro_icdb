@@ -43,10 +43,10 @@ namespace Demo
 
 
         //generate the list of brand with index number for magento filterable attribute
-        public static Dictionary<string, int> brand_name()
+        public static Dictionary<string, string> brand_name()
         {
             Mysql_DataProvider mysql_data = new Mysql_DataProvider();
-            Dictionary<string, int> brand_name = new Dictionary<string, int>();
+            Dictionary<string, string> brand_name = new Dictionary<string, string>();
             brand_name = mysql_data.sku_brand();
             return brand_name;
         }
@@ -1563,7 +1563,7 @@ namespace Demo
             return title;
         }
 
-        public static string ngo_title(RefrubHistoryObj spec)
+        public static string ngo_title(Models.RefrubHistoryObj spec)
         {
             string title = "";
             string s = spec.cpu;
@@ -1645,6 +1645,7 @@ namespace Demo
                     string str = spec.cpu.Substring(spec.cpu.IndexOf('@') + 1);
                     str = str.Replace("GHz", "");
                     title = str + "Xeon";
+                   
                 }
                 else if (s.Contains("AMD"))
                 {
@@ -1660,10 +1661,10 @@ namespace Demo
                     spec.cpu_desc = "";
                 }
             }
-
+            spec.cpu_title = title;
             return title;
         }
-        public static string comput_title(RefrubHistoryObj spec)
+        public static string comput_title(Models.RefrubHistoryObj spec)
         {
 
 
@@ -1688,7 +1689,7 @@ namespace Demo
 
                 if (s.Contains("(TM)2 Duo") || s.Contains("Intel(R) Core(TM)2 CPU") || s.Contains("Genuine Intel(R) CPU"))
                 {
-
+                    spec.cpu_title = "c2d";
                     var result = mysql_data.get_cpu("c2d");
                     title = c2d_cpu(s);
                     spec.cpu_desc = result.html;
@@ -1696,6 +1697,7 @@ namespace Demo
                 }
                 else if (s.Contains("2 Quad"))
                 {
+                    spec.cpu_title = "c2q";
                     var result = mysql_data.get_cpu("c2q");
                     spec.cpu_desc = result.html;
                     spec.cpu_dropdown = result.dropdown_value;
@@ -1705,6 +1707,7 @@ namespace Demo
                 }
                 else if (s.Contains("Core(TM)2 Extreme"))
                 {
+                    spec.cpu_title = "c2q";
                     var result = mysql_data.get_cpu("c2q");
                     title = c2d_cpu(s);
                     title = title.Replace("c2d", "c2Extreme");
@@ -1715,6 +1718,7 @@ namespace Demo
 
                 else if (s.Contains("i3"))
                 {
+                    spec.cpu_title = "i3";
                     var result = mysql_data.get_cpu("i3");
                     spec.cpu_desc = result.html;
                     spec.cpu_dropdown = result.dropdown_value;
@@ -1722,6 +1726,7 @@ namespace Demo
                 }
                 else if (s.Contains("i5"))
                 {
+                    spec.cpu_title = "i5";
                     var result = mysql_data.get_cpu("i5");
                     spec.cpu_desc = result.html;
                     spec.cpu_dropdown = result.dropdown_value;
@@ -1730,6 +1735,7 @@ namespace Demo
                 }
                 else if (s.Contains("i7"))
                 {
+                    spec.cpu_title = "i7";
                     var result = mysql_data.get_cpu("i7");
                     spec.cpu_desc = result.html;
                     spec.cpu_dropdown = result.dropdown_value;
@@ -1737,6 +1743,7 @@ namespace Demo
                 }
                 else if (s.Contains("Pentium(R) Dual-Core"))
                 {
+                    spec.cpu_title = "c2d";
                     var result = mysql_data.get_cpu("c2d");
 
                     spec.cpu_desc = result.html;
@@ -1745,6 +1752,7 @@ namespace Demo
                 }
                 else if (s.Contains("Celeron") || (s.Contains("Intel(R) Pentium(R) M")) || (s.Contains("Core(TM) M")))
                 {
+                    spec.cpu_title = "c2d";
                     var result = mysql_data.get_cpu("c2d");
 
                     spec.cpu_desc = result.html;
@@ -1753,6 +1761,7 @@ namespace Demo
                 }
                 else if (s.Contains("Xeon"))
                 {
+                    spec.cpu_title = "xeon";
                     var result = mysql_data.get_cpu("xeon");
 
                     spec.cpu_desc = result.html;
@@ -1763,6 +1772,7 @@ namespace Demo
                 }
                 else if (s.Contains("AMD"))
                 {
+                    spec.cpu_title = "amd";
                     var result = mysql_data.get_cpu("amd");
 
                     spec.cpu_desc = result.html;
@@ -1778,7 +1788,7 @@ namespace Demo
 
             return title;
         }
-        public static string hdd_format(bool IsMagento, RefrubHistoryObj spec)
+        public static string hdd_format(bool IsMagento, Models.RefrubHistoryObj spec)
         {
             List<int> hdd_list = new List<int>();
             hdd_list.Add(60);
@@ -1851,7 +1861,7 @@ namespace Demo
             return temp_hdd;
         }
 
-        public static string ram_format(RefrubHistoryObj spec, bool IsMagento)
+        public static string ram_format(Models.RefrubHistoryObj spec, bool IsMagento)
         {
             List<int> ram_list = new List<int>();
             ram_list.Add(1);
@@ -1942,7 +1952,7 @@ namespace Demo
 
 
         //format the sku pass in for magento friendly sku
-        public static RefrubHistoryObj format_sku(RefrubHistoryObj obj)
+        public static Models.RefrubHistoryObj format_sku(Models.RefrubHistoryObj obj)
         {
             if (obj.type == "_LP")
             {
@@ -1972,7 +1982,7 @@ namespace Demo
 
         //     return brand;
         // }
-        public static RefrubHistoryObj brand_dropdown(RefrubHistoryObj spec)
+        public static Models.RefrubHistoryObj brand_dropdown(Models.RefrubHistoryObj spec)
         {
 
             switch (spec.brand)

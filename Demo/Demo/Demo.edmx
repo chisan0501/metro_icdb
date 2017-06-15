@@ -288,6 +288,19 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <Property Name="station_dropdown_value" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" />
         </EntityType>
+        <EntityType Name="training_data">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cpu" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="ram" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="hdd" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="grade" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="type" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="channel" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="char" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="users">
           <Key>
             <PropertyRef Name="user_name" />
@@ -378,6 +391,7 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <EntitySet Name="setting" EntityType="Self.setting" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="setting_bol" EntityType="Self.setting_bol" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="station_setting" EntityType="Self.station_setting" Schema="db_a094d4_demo" store:Type="Tables" />
+          <EntitySet Name="training_data" EntityType="Self.training_data" Schema="db_a094d4_demo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="db_a094d4_demo" store:Type="Tables" />
           <AssociationSet Name="ApplicationUser_Claims" Association="Self.ApplicationUser_Claims">
             <End Role="aspnetusers" EntitySet="aspnetusers" />
@@ -726,6 +740,7 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <EntitySet Name="scripts" EntityType="db_a094d4_demoModel.scripts" />
           <EntitySet Name="magento_html" EntityType="db_a094d4_demoModel.magento_html" />
           <EntitySet Name="magento_sku_brand" EntityType="db_a094d4_demoModel.magento_sku_brand" />
+          <EntitySet Name="training_data" EntityType="db_a094d4_demoModel.training_data" />
         </EntityContainer>
         <EntityType Name="scripts">
           <Key>
@@ -753,6 +768,19 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
           <Property Name="dropdown_value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="sku_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="index" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="training_data">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cpu" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ram" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="hdd" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="grade" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="channel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="price" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1065,6 +1093,20 @@ warning 6013: The table/view 'def.db_a094d4_demo.misc_setting' does not have a p
                 <ScalarProperty Name="sku_name" ColumnName="sku_name" />
                 <ScalarProperty Name="dropdown_value" ColumnName="dropdown_value" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="training_data">
+            <EntityTypeMapping TypeName="db_a094d4_demoModel.training_data">
+              <MappingFragment StoreEntitySet="training_data">
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="channel" ColumnName="channel" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="grade" ColumnName="grade" />
+                <ScalarProperty Name="hdd" ColumnName="hdd" />
+                <ScalarProperty Name="ram" ColumnName="ram" />
+                <ScalarProperty Name="cpu" ColumnName="cpu" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

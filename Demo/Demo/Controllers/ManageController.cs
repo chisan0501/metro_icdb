@@ -436,19 +436,228 @@ namespace Demo.Controllers
 
         public JsonResult get_channel() {
 
-            var result = (from t in db.label_menu select t.name).ToList().Distinct();
+            var channel = (from t in db.label_menu select t.name).ToList().Distinct();
+            var refurbisher = (from t in db.users select t.user_name).ToList();
 
-
-            return Json(result,JsonRequestBehavior.AllowGet);
+            return Json(new { channel =channel, refurbisher = refurbisher},JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult get_dymo (string asset_tag, string sub, string channel,string grade) {
+        public JsonResult remove_channel(string name)
+        {
+
+            string message = "";
+            string type = "success";
+
+            using (var db = new db_a094d4_demoEntities1())
+            {
+                var delete = db.label_menu.Where(s => s.name == name).ToList();
+                try
+                {
+                    foreach (var item in delete) {
+                        db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                        db.SaveChanges();
+
+                    }
+                   
+                    message = name + " and all product related have been Removed.";
+                }
+
+                catch (Exception e)
+                {
+                    message = e.InnerException.InnerException.Message;
+                    type = "alert";
+                }
+            }
+
+            return Json(new { type = type, message = message }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult add_channel(string name,string sku)
+        {
+
+            string message = "";
+            string type = "success";
+            using (var db = new db_a094d4_demoEntities1())
+            {
+
+                var label_menu = new label_menu();
+
+                label_menu.name = name;
+                label_menu.product = sku;
+                try
+                {
+                    db.label_menu.Add(label_menu);
+
+                    db.SaveChanges();
+                    message = name + " has been added.";
+                }
+                catch (Exception e)
+                {
+
+                    message = e.InnerException.InnerException.Message;
+                    type = "alert";
+                }
+
+            }
 
 
-            SQLModel.RefrubHistoryObj RefrubHistoryObj = new SQLModel.RefrubHistoryObj();
-            int Intasset_tag = int.Parse(asset_tag);
-            var hardware_result = (from t in db.rediscovery where t.ictag == Intasset_tag select t).FirstOrDefault();
-            RefrubHistoryObj.asset_tag = Intasset_tag;
+
+
+            return Json(new { type = type, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult remove_sku(string name)
+        {
+
+            string message = "";
+            string type = "success";
+
+            using (var db = new db_a094d4_demoEntities1())
+            {
+                var delete = db.label_menu.Where(s => s.product == name).FirstOrDefault<label_menu>();
+                try
+                {
+
+                    db.Entry(delete).State = System.Data.Entity.EntityState.Deleted;
+                    db.SaveChanges();
+                    message = name + " has been Removed.";
+                }
+
+                catch (Exception e)
+                {
+                    message = e.InnerException.InnerException.Message;
+                    type = "alert";
+                }
+            }
+
+            return Json(new { type = type, message = message }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult add_sku(string channel_name,string sku_name)
+        {
+
+            string message = "";
+            string type = "success";
+            using (var db = new db_a094d4_demoEntities1())
+            {
+
+                var label_menu = new label_menu();
+
+                label_menu.product = sku_name;
+                label_menu.name = channel_name;
+                try
+                {
+                    db.label_menu.Add(label_menu);
+                    db.SaveChanges();
+                    message = sku_name + " has been added.";
+                }
+                catch (Exception e)
+                {
+
+                    message = e.InnerException.InnerException.Message;
+                    type = "alert";
+                }
+
+            }
+
+
+
+
+            return Json(new { type = type, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult remove_refurbisher(string name) {
+
+            string message = "";
+            string type = "success";
+
+            using (var db = new db_a094d4_demoEntities1()) {
+                var delete = db.users.Where(s => s.user_name == name).FirstOrDefault<users>();
+                try
+                {
+
+                    db.Entry(delete).State = System.Data.Entity.EntityState.Deleted;
+                    db.SaveChanges();
+                    message = name + " has been Removed.";
+                }
+
+                catch (Exception e) {
+                    message = e.InnerException.InnerException.Message;
+                    type = "alert";
+                }
+            }
+
+            return Json(new {type=type, message = message }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult add_refurbisher(string name) {
+
+            string message = "";
+            string type = "success";
+            using (var db = new db_a094d4_demoEntities1()) {
+
+                var user = new users();
+
+                user.user_name = name;
+                try
+                {
+                    db.users.Add(user);
+                    db.SaveChanges();
+                    message = name + " has been added.";
+                }
+                catch(Exception e) {
+
+                    message = e.InnerException.InnerException.Message;
+                    type = "alert";
+                }
+
+            }
+
+          
+
+
+         return Json(new { type = type, message = message},JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        [ValidateInput(false)]
+        public JsonResult print_action(RefrubHistoryObj RefrubHistoryObj) {
+
+            bool message = false;
+            try
+            {
+                var listing = new magento_listing();
+                RefrubHistoryObj = listing.listing_info(RefrubHistoryObj);
+                listing.get_exisiting(RefrubHistoryObj);
+
+                var mysql_data = new Mysql_DataProvider();
+               
+                        mysql_data.insert(RefrubHistoryObj);
+                        message = true;
+
+                     
+                
+            }
+            catch (Exception e) {
+
+
+            }
+                   
+            
+            
+            return Json(message,JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult get_dymo (RefrubHistoryObj RefrubHistoryObj) {
+           
+            bool sucess = false;
+            
+        
+            var hardware_result = (from t in db.rediscovery where t.ictag == RefrubHistoryObj.asset_tag select t).FirstOrDefault();
+
+            if (hardware_result == null) {
+
+                return Json(new { obj = RefrubHistoryObj ,sucess = sucess}, JsonRequestBehavior.AllowGet);
+            }
+            
+            //RefrubHistoryObj.asset_tag = Intasset_tag;
             RefrubHistoryObj.cpu = hardware_result.cpu;
             RefrubHistoryObj.hdd = hardware_result.hdd;
             RefrubHistoryObj.ram = hardware_result.ram;
@@ -456,7 +665,9 @@ namespace Demo.Controllers
             RefrubHistoryObj.model = hardware_result.model;
             RefrubHistoryObj.is_ssd = hardware_result.has_SSD;
             RefrubHistoryObj.brand = hardware_result.brand;
-            switch (channel)
+            RefrubHistoryObj.optical_drive = hardware_result.optical_drive;
+            RefrubHistoryObj.made = hardware_result.brand;
+            switch (RefrubHistoryObj.channel)
             {
                 case "Tableau (Laptop)":
                 case "Tableau (Desktop)":
@@ -473,7 +684,8 @@ namespace Demo.Controllers
                     {
                         if (hardware_result.brand.Equals(brand.Key, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            RefrubHistoryObj.brand = brand.Key;
+                            RefrubHistoryObj.brand = brand.Value;
+                            break;
                         }
                         else
                         {
@@ -482,9 +694,9 @@ namespace Demo.Controllers
                     }
 
 
-                    //  var temp_brand = magento_sku.compute_difference(RefrubHistoryObj.made, magento_sku.brand_name());
+                  
 
-                    if (channel == "NGO")
+                    if (RefrubHistoryObj.channel == "NGO")
                     {
                         temp_cpu = magento_sku.ngo_title(RefrubHistoryObj);
                     }
@@ -495,26 +707,36 @@ namespace Demo.Controllers
 
                     RefrubHistoryObj.ram = magento_sku.ram_format(RefrubHistoryObj, false);
                     RefrubHistoryObj.hdd = magento_sku.hdd_format(false, RefrubHistoryObj);
-                    RefrubHistoryObj.grade = grade;
+                   
 
-                //    var magento_listing = listing.listing_info(RefrubHistoryObj);
+                   
                     RefrubHistoryObj = magento_sku.format_sku(RefrubHistoryObj);
 
                     RefrubHistoryObj.sku = RefrubHistoryObj.brand + "_" + RefrubHistoryObj.model + "_" + temp_cpu + "_" + RefrubHistoryObj.ram + "_" + RefrubHistoryObj.hdd + RefrubHistoryObj.type + RefrubHistoryObj.grade;
 
-
-                    break;
-                case "Online Order":
-                    //await _dialogCoordinator.ShowInputAsync(this, "Online Order", "Please Enter Order #").ContinueWith(t => sku = (t.Result));
-                    //RefrubHistoryObj.sku = sku;
+                    switch (RefrubHistoryObj.channel)
+                    {
+                        case "OEM (Desktop)":
+                        case "OEM (Laptop)":
+                            RefrubHistoryObj.sku = "OEM_" + RefrubHistoryObj.sku;
+                            break;
+                        case "NGO":
+                            RefrubHistoryObj.sku = RefrubHistoryObj.sku + "_NGO";
+                            break;
+                        case "Tableau (Desktop)":
+                        case "Tableau (Laptop)":
+                            RefrubHistoryObj.sku = RefrubHistoryObj.sku + "_Tab";
+                            break;
+                    }
+                    
                     break;
                 case "My Channel is not Listed":
-                    //await _dialogCoordinator.ShowInputAsync(this, "Custom Channel", "Please Enter Channel Name").ContinueWith(t => sku = (t.Result));
-                    //RefrubHistoryObj.sku = sku;
-
+                    RefrubHistoryObj.channel = RefrubHistoryObj.sku;
                     break;
+                case "Online Order":
+                
                 default:
-                    RefrubHistoryObj.sku = sub;
+                    
 
                     break;
 
@@ -523,9 +745,9 @@ namespace Demo.Controllers
 
 
 
-            
-            
-            return Json(RefrubHistoryObj, JsonRequestBehavior.AllowGet);
+
+            sucess = true;
+            return Json(new { obj = RefrubHistoryObj, sucess = sucess }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

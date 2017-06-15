@@ -133,7 +133,7 @@
             var mywindow = window.open('', 'PRINT', 'height=600,width=600');
 
             mywindow.document.write('<html><head>');
-            mywindow.document.write('</head><style> @@page {size: 99px 57px;margin: 0;} ul{list-style-type: none;} .print:last-child {page-break-after: auto;}</style><body>');
+            mywindow.document.write('</head><style> @@page {size: 150px 57px;margin: 0;} ul{list-style-type: none;} .print:last-child {page-break-after: auto;}</style><body>');
             mywindow.document.write($('#elem').html());
             mywindow.document.write('</body></html>');
 
@@ -143,7 +143,7 @@
             mywindow.print();
             mywindow.close();
 
-            $('#ull').html("");
+           // $('#ull').html("");
             return true;
 
 
@@ -156,8 +156,8 @@
 
         JsBarcode("#barcode" + id_num, barcode, {
             format: "CODE128",
-            fontSize: 15,
-            width: 1,
+            fontSize: 30,
+            width: 2,
             height: 30,
             displayValue: true
         });

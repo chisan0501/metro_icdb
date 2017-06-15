@@ -6,15 +6,14 @@
 
 <script src="~/Scripts/DYMO.Label.Framework.2.0.2.js"></script>
 
-
 <h2 class="leader">Dymo Label Web Application</h2>
-
+<div id="loader" data-role="preloader" data-type="metro" data-style="color"></div>
 <div>
     <div class="tabcontrol2" data-role="tabcontrol" data-save-state="true" id="tabcontrol_4">
         <ul class="tabs">
             <li><a href="#frame_4_1">Refrub</a></li>
             <li><a href="#frame_4_2">Quick Reprint</a></li>
-            <li><a href="#frame_4_3">RMA</a></li>
+            <li><a href="#frame_4_3">Setting</a></li>
         </ul>
         <div class="frames">
             <div class="frame" id="frame_4_1">
@@ -22,6 +21,18 @@
                     <div class="row">
                         <div class="cell colspan3">
                             <form data-on-submit="return false" data-role="validator" >
+                                <div class="input-control select">
+                                    <select class='refurbisher' id="refurbisher" data-validate-func="required">
+                                        <option selected value="">Select Refurbisher</option>
+                                    </select>
+                                </div>
+                                <div class="input-control select">
+                                    <select id='comp_type' data-validate-func="required">
+                                        <option selected value="">Select Computer Type</option>
+                                        <option  value="_DK">Desktop</option>
+                                        <option value="_LP">Laptop</option>
+                                    </select>
+                                </div>
                                 <div class="input-control text">
                                     <input data-validate-func="minlength"
             data-validate-arg="5" data-validate-hint="This field must contains min 5 symbols!" type="text" required placeholder="Enter Asset Tag" id="asset">
@@ -29,10 +40,10 @@
                                     <span class="input-state-success mif-checkmark"></span>
                                 </div>
                                 <div class="input-control text">
-                                    <input type="text" placeholder="Enter Pre-COA" value="00999-999-000-999">
+                                    <input id="pre_coa" type="text" placeholder="Enter Pre-COA" value="00999-999-000-999">
                                 </div>
                                 <div class="input-control select">
-                                    <select id='channel' data-validate-func="required" >
+                                    <select id='channel' class="channel" data-validate-func="required" >
                                       
                                     </select>
                                 </div>
@@ -58,11 +69,11 @@
                                     <span class="icon mif-search"></span>
                                     Search
                                 </button>
-                                <button type="button" disabled class="command-button">
+                                <button id="print" type="button" disabled class="command-button">
                                     <span class="icon mif-print"></span>
                                     Print
                                 </button>
-                                <button type="button" class="command-button">
+                                <button id="clear" type="button" class="command-button">
                                     <span class="icon mif-bin"></span>
                                     Clear
                                 </button>
@@ -70,7 +81,8 @@
                             </form>
                           
                             </div>
-                        <div class="cell colspan4">
+                        <div id="hardware_spec_input" class="cell colspan4">
+                           
                             <label>Make</label>
                             <div class="input-control text full-size">
                                 <input id="brand" type="text">
@@ -99,6 +111,10 @@
                             <div class="input-control text full-size">
                                 <input id="has_ssd" type="text">
                             </div>
+                            <label>Channel</label>
+                            <div class="input-control text full-size">
+                                <input id="channel_txt" type="text">
+                            </div>
                             <label>SKU</label>
                             <div class="input-control text full-size">
                                 <input id="sku" type="text">
@@ -112,7 +128,71 @@
                 </div>
             
             <div class="frame" id="frame_4_2">2</div>
-            <div class="frame" id="frame_4_3">3</div>
+            <div class="frame" id="frame_4_3">
+
+
+                <div class="flex-grid">
+                    <div class="row">
+                        <div class="cell size4 "><h4>Add Refurbisher</h4></div>
+                        <div class="cell size6 ">
+
+                            <div class="input-control select">
+                                <select id="refurbisher_list" class='refurbisher' data-validate-func="required">
+                                    <option selected value="">Select Refurbisher</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cell size2 ">
+
+                            <button id="add_refurbisher_btn" class="button primary">
+                                Add
+                            </button>
+                            <button id="remove_refurbisher_btn" class="button primary">Remove</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell size4 "><h4>Add Channel</h4></div>
+                        <div class="cell size6 ">
+
+                            <div class="input-control select">
+                                <select id="channel_list" class='channel' data-validate-func="required">
+                                    <option selected value="">Select Channel</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cell size2 ">
+
+                            <button id="add_channel_btn" class="button primary">
+                                Add
+                            </button>
+                            <button id="remove_channel_btn" class="button primary">Remove</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="cell size4 "><h4>Add SKU</h4></div>
+                        <div class="cell size6 ">
+
+                            <div class="input-control select">
+                                <select id="sku_channel_list" class='channel' data-validate-func="required">
+                                    <option selected value="">Select Channel</option>
+                                </select>
+                            </div>
+                            <div class="input-control select">
+                                <select id="sku_list" data-validate-func="required">
+                                    <option selected value="">Select SKU</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cell size2 ">
+
+                            <button id="add_sku_btn" class="button primary">
+                                Add
+                            </button>
+                            <button id="remove_sku_btn" class="button primary">Remove</button>
+                        </div>
+                    </div>
+                    </div>  
+                </div>
         </div>
     </div>
 </div>
@@ -123,40 +203,285 @@
 
 <script>
 
+   $('#remove_sku_btn').click(function() {
+       var name = $('#sku_list option:selected').text();
+
+        var data = { name: name };
+          $.getJSON("@Url.Action("remove_sku")", data, function (data) {
+              set_menu();
+              $.Notify({ type: data.type, caption: "Message", content: data.message });
+              $('#sku_list').html('');
+                        });
+    });
+
+     $('#add_sku_btn').click(function(){
+
+        $.Dialog({
+            title: "Message",
+            content: "Please Enter the Name of the SKU <p><div class='input-control text'><input id='sku_name' type='text'></div></p>",
+            actions: [
+                {
+                    title: "Ok",
+                    onclick: function (el) {
+
+
+                        var data = { sku_name: $('#sku_name').val(), channel_name: $('#sku_list option:selected').text()}
+
+                        $.getJSON("@Url.Action("add_sku")", data, function (data) {
+
+                            set_menu();
+                            $.Notify({ type: data.type, caption: "Message", content: data.message });
+
+                        });
+
+
+                        $(el).data('dialog').close();
+                    }
+                },
+                {
+                    title: "Cancel",
+                    cls: "js-dialog-close"
+                }
+            ],
+            options: {
+                overlay: true,
+                overlayColor: "#000000",
+                overlayClickClose: true
+
+            }
+        });
+
+
+    });
+
+
+    $('#sku_channel_list').change(function () {
+        var sub = $('#sku_channel_list option:selected').text();
+
+        var data = { sub: sub }
+
+        $.getJSON("@Url.Action("get_sub_channel")", data, function (data) {
+
+            $('#sku_list').html('');
+            $('#sku_list').html("<option selected value=''>Select SKU</option>");
+            for (var i = 0; i < data.length; i++) {
+                switch (sub) {
+                    case "Mar (Desktop)":
+                    case "Mar (Laptop)":
+                    case "OEM (Desktop)":
+                    case "OEM (Laptop)":
+                    case "Tableau (Desktop)":
+                    case "Tableau (Laptop)":
+                    case "City Of Seattle (Desktop)":
+                    case "City Of Seattle (Laptop)":
+                    case "NGO":
+                        {
+                            $('#sku_list').append("<option selected value='" + data[i] + "'>" + data[i] + "</option>");
+                            break;
+                        }
+                    default:
+                        $('#sku_list').append("<option value='" + data[i] + "'>" + data[i] + "</option>");
+
+                }
+
+
+            }
+
+        });
+
+
+    });
+
+
+
+
+    $('#add_channel_btn').click(function(){
+
+        $.Dialog({
+            title: "Message",
+            content: "Please Enter the Name of the Channel <p><div class='input-control text'><input id='channel_name' type='text'></div></p><p>Enter Your First SKU for this Channel</p><p><div class='input-control text'><input id='sku_name' type='text'></div></p>",
+            actions: [
+                {
+                    title: "Ok",
+                    onclick: function (el) {
+
+
+                        var data = { name: $('#channel_name').val(), sku: $('#sku_name').val()}
+
+                        $.getJSON("@Url.Action("add_channel")", data, function (data) {
+
+                            set_menu();
+                            $.Notify({ type: data.type, caption: "Message", content: data.message });
+
+
+
+
+                        });
+
+
+                        $(el).data('dialog').close();
+                    }
+                },
+                {
+                    title: "Cancel",
+                    cls: "js-dialog-close"
+                }
+            ],
+            options: {
+                overlay: true,
+                overlayColor: "#000000",
+                overlayClickClose: true
+
+            }
+        });
+
+
+    });
+
+    $('#remove_channel_btn').click(function() {
+        var name = $('#channel_list option:selected').text();
+
+        var data = { name: name };
+          $.getJSON("@Url.Action("remove_channel")", data, function (data) {
+              set_menu();
+              $.Notify({ type: data.type, caption: "Message", content: data.message });
+
+                        });
+    });
+
+    $('#remove_refurbisher_btn').click(function() {
+        var name = $('#refurbisher_list option:selected').text();
+
+        var data = { name: name };
+          $.getJSON("@Url.Action("remove_refurbisher")", data, function (data) {
+              set_menu();
+              $.Notify({ type: data.type, caption: "Message", content: data.message });
+
+                        });
+    });
+
+    $('#add_refurbisher_btn').click(function(){
+
+        $.Dialog({
+            title: "Message",
+            content: "Please Enter the Name of the Refurbisher <p><div class='input-control text'><input id='refurbisher_name' type='text'></div></p>",
+            actions: [
+                {
+                    title: "Ok",
+                    onclick: function (el) {
+
+
+                        var data = { name: $('#refurbisher_name').val()}
+
+                        $.getJSON("@Url.Action("add_refurbisher")", data, function (data) {
+
+                            set_menu();
+                            $.Notify({ type: data.type, caption: "Message", content: data.message });
+
+                        });
+
+
+                        $(el).data('dialog').close();
+                    }
+                },
+                {
+                    title: "Cancel",
+                    cls: "js-dialog-close"
+                }
+            ],
+            options: {
+                overlay: true,
+                overlayColor: "#000000",
+                overlayClickClose: true
+
+            }
+        });
+
+
+    });
+
+
+    $('#loader').hide();
+    var label;
+    var temp_obj;
     $(".panel").panel();
     var printers = dymo.label.framework.getPrinters();
     set_menu();
 
     $('#search').click(function (e) {
+        $('#loader').show();
         var asset_tag = $('#asset').val();
         var channel = $('#channel option:selected').text();
         var sub = $('#sub option:selected').text();
         var grade = $('#grade_select option:selected').val();
+        var refurbisher = $('#refurbisher option:selected').val();
+        var comp_type = $('#comp_type option:selected').val();
+        var pre_coa = $('#pre_coa').val();
         var data = {
+            pre_coa : pre_coa,
+            refurbisher: refurbisher,
+            type: comp_type,
             asset_tag: asset_tag,
             channel: channel,
-            sub : sub,
+            sku : sub,
             grade : grade
         }
         $.getJSON("@Url.Action("get_dymo")", data, function (data) {
-            $('#brand').val(data.brand);
-            $('#model').val(data.model);
-            $('#cpu').val(data.cpu);
-            $('#ram').val(data.ram);
-            $('#hdd').val(data.hdd);
-            $('#serial').val(data.serial);
-            $('#has_ssd').val(data.is_ssd);
-            $('#sku').val(data.sku);
+
+            if (data.sucess === false) {
+
+                $.Dialog({
+                    title: "Message",
+                    content: "Asset Tag Not Found in Database",
+
+                    options: {
+                        overlay: true,
+                        overlayColor: "#000000",
+                        overlayClickClose : true
+                    }
+                });
+            }
+
+
+            temp_obj = data.obj;
+            $('#channel_txt').val(data.obj.channel)
+            $('#brand').val(data.obj.brand);
+            $('#model').val(data.obj.model);
+            $('#cpu').val(data.obj.cpu);
+            $('#ram').val(data.obj.ram);
+            $('#hdd').val(data.obj.hdd);
+            $('#serial').val(data.obj.serial);
+            $('#has_ssd').val(data.obj.is_ssd);
+            $('#sku').val(data.obj.sku);
+            load_label();
+            $('#print').removeAttr('disabled');
+            $('#loader').hide();
         });
 
     });
 
 
-    load_label();
+
 
     $('#channel').change(function () {
-        var sub =  $('#channel option:selected').text();
-        var data = { sub : sub }
+        var sub = $('#channel option:selected').text();
+
+        if (sub == "My Channel is not Listed" || sub == "Online Order") {
+
+            $.Dialog({
+                title: "Message",
+                content: "Enter Online Order # or Channel Name<form><div class='input-control text'><input id='custom_channel' required type='text'></div><button class='js-dialog-close button' id='custom_submit'><span class='mif-keyboard-return'></span></button></form>",
+                options: {
+                    overlay: true,
+                    overlayColor: "#000000",
+                    overlayClickClose: true
+                }
+            });
+
+        }
+
+        else {
+             var data = { sub : sub }
 
         $.getJSON("@Url.Action("get_sub_channel")", data,function (data) {
 
@@ -170,6 +495,8 @@
                     case "OEM (Laptop)":
                     case "Tableau (Desktop)":
                     case "Tableau (Laptop)":
+                    case "City Of Seattle (Desktop)":
+                    case "City Of Seattle (Laptop)":
                     case "NGO":
                         {
                             $('#sub').append("<option selected value='" + data[i] + "'>" + data[i] + "</option>");
@@ -177,15 +504,27 @@
                         }
                     default:
                         $('#sub').append("<option value='" + data[i] + "'>" + data[i] + "</option>");
-                
+
                 }
-                
+
 
             }
 
         });
 
+
+        }
+
+        $('#custom_submit').click(function (e) {
+            e.preventDefault();
+
+            $('#sub').html("<option selected value='" + $('#custom_channel').val() +"'>" + $('#custom_channel').val() + "</option>");
+
+        });
     });
+
+
+
 
     function set_menu() {
 
@@ -198,29 +537,99 @@
         }
         $.getJSON("@Url.Action("get_channel")",function (data) {
 
-            $('#channel').html('');
-            $('#channel').html("<option selected value=''>Select Channel</option>");
-            for (var i = 0; i < data.length; i++) {
-                $('#channel').append("<option value='"+data[i]+"'>"+data[i]+"</option>")
+            $('.channel').html('');
+            $('.channel').html("<option selected value=''>Select Channel</option>");
+
+            for (var i = 0; i < data.channel.length; i++) {
+                $('.channel').append("<option value='" + data.channel[i] + "'>" + data.channel[i]+"</option>")
+
+            }
+            $('.refurbisher').html('');
+            $('.refurbisher').html("<option selected value=''>Select Refurbisher</option>");
+            for (var i = 0; i < data.refurbisher.length; i++) {
+                $('.refurbisher').append("<option value='" + data.refurbisher[i] + "'>" + data.refurbisher[i] + "</option>")
 
             }
         });
     };
 
+    $("#hardware_spec_input :input").on('input', function (e) {
+        load_label();
+    });
+
+
+
     function load_label() {
-        var labelUri = "http://dev.icdb.name/source.label";
-        var label = dymo.label.framework.openLabelFile(labelUri);
+        $('#label_img').html("");
+        var current_time = moment().format('L');
+        var labelUri = "http://dev.icdb.name/source.txt";
+        label = dymo.label.framework.openLabelFile(labelUri);
         var printerName = $('#printer_select option:selected').text();
+                var channel_name = $('#channel_txt').val();
+        var product_name = $('#sku').val();
+        var manu = $('#model').val();
+        var cpu = $('#cpu').val();
+        var ram = $('#ram').val() + "GB";
 
+        if ($('#has_ssd').val() === "True") {
+            var hdd = $('#hdd').val() + "GB SSD";
+        }
+        else {
+            var hdd = $('#hdd').val() + "GB";
+        }
+        var time = current_time;
+        var serial = $('#serial').val();
+        var asset_tag = $('#asset').val();
+        var user = $('#refurbisher option:selected').text();
 
-        var image = document.createElement('img');
-        var labelXml = dymo.label.framework.openLabelFile(labelUri).getLabelXml();
-        var pngData = dymo.label.framework.renderLabel(labelXml, "", printerName);
-        image.src = "data:image/png;base64," + pngData;
-        document.getElementById('label_img').appendChild(image);
+        label.setObjectText("channel", channel_name);
+        label.setObjectText("pallet", product_name);
+        label.setObjectText("BARCODE", product_name);
+        label.setObjectText("manu", manu);
+        label.setObjectText("cpu", cpu);
+        label.setObjectText("ram", ram);
+        label.setObjectText("hdd", hdd);
+        label.setObjectText("time", time);
+        label.setObjectText("serial", serial);
+        label.setObjectText("asset_tag", asset_tag);
+        label.setObjectText("refur", user)
+
+        preview(label,printerName);
 
     };
 
 
+    function preview(label,printerName) {
+
+        var image = document.createElement('img');
+        var pngData = dymo.label.framework.renderLabel(label, "", printerName);
+        image.src = "data:image/png;base64," + pngData;
+        document.getElementById('label_img').appendChild(image);
+
+    }
+
+    $('#print').click(function () {
+
+
+        $.getJSON("@Url.Action("print_action")", temp_obj, function (data) {
+
+
+
+        });
+
+        var printername = document.getElementById("printer_select");
+        selectedNode = printername.options[printername.selectedIndex];
+        label.print(selectedNode.value);
+        $("#print").prop("disabled", true);
+        $('#asset').val("");
+        $('#pre_coa').val('00999-999-000-999');
+    });
+
+    $('#clear').click(function () {
+        $('#asset').val("");
+        $('#pre_coa').val('00999-999-000-999');
+        $("#channel").val($("#myList option:eq(1)").val());
+        $("#sub").val($("#myList option:eq(1)").val());
+    });
 
 </script>

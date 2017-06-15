@@ -47,7 +47,7 @@
     <div class="login-form padding40 block-shadow">
       
     
-                        @using (Html.BeginForm("Register", "Account", FormMethod.Post,new { data_role = "validator" }))
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post,new { data_role = "validator", data_hint_mode = "hint", data_hint_easing = "easeOutBounce" }))
 
                         {
                             @Html.AntiForgeryToken()
@@ -57,7 +57,8 @@
 
                             <div class="input-control text full-size">
                                 <label for="user_login">User email:</label>
-                                <input data-validate-func="required"  data-validate-hine="This field can not be empty!" type="email" name="Email" id='email'>
+                                <input type="email" name='email' id="email" data-validate-func="required" data-validate-hint="This Field is Required" data-validate-hint-position="top">
+
                                 <span class="input-state-error mif-warning"></span>
                                 <span class="input-state-success mif-checkmark"></span>
                             </div>
@@ -65,15 +66,21 @@
                             <br />
                             <div class="input-control password full-size" data-role="input">
                                 <label  for="user_password">User password:</label>
-                                <input type="password" name="password" id='password'>
-                                <button class="button helper-button reveal"><span class="mif-looks"></span></button>
+                                <input type="password" name='password'  data-validate-func="minlength"
+            data-validate-arg="6"
+            data-validate-hint="This field must contains min 6 symbols!" data-validate-hint-position="top">
+
+                                <span class="input-state-error mif-warning"></span>
+                                <span class="input-state-success mif-checkmark"></span>
                             </div>
                             <br />
                             <br />
                             <div class="input-control password full-size" data-role="input">
                                 <label  for="user_password">Confrim Password:</label>
-                                <input type="password" name='ConfirmPassword' id='ConfirmPassword'>
-                                <button class="button helper-button reveal"><span class="mif-looks"></span></button>
+                                <input type="password" name='ConfirmPassword' id='ConfirmPassword' data-validate-func="minlength"
+            data-validate-arg="6"
+            data-validate-hint="This field must contains min 6 symbols!" data-validate-hint-position="top">
+                                <button class="button helper-button reveal" ><span class="mif-looks"></span></button>
                             </div>
                             <br />
                             <br />
@@ -102,8 +109,15 @@
 </html>
 
 <script>
-    $(document).ready(function () {
-
-        $('select').material_select();
-    });
+   
+      
+        function notifyOnErrorInput(input) {
+            var message = input.data('validateHint');
+            $.Notify({
+                caption: 'Error',
+                content: message,
+                type: 'alert'
+            });
+    };
+    
 </script>
